@@ -17,8 +17,8 @@ app.use(express.json());
 //     });
 
 //Importing the routes
-import postsRoute from './routes/posts.route';
-app.use("/api/post", postsRoute);
+import productRoute from './routes/product.route';
+app.use("/api/product", productRoute);
 
 import userRoute from './routes/user.route';
 app.use("/api/user", userRoute);
