@@ -7,14 +7,14 @@ app.use(express.json());
 import mongoose from 'mongoose'
 import { mongodbURL } from './config';
 
-mongoose
-    .connect(mongodbURL, {dbName: "postDB"})
-    .then(() =>{
-        console.log("App connected to database");
-    })
-    .catch((err)=>{
-        console.log(err);
-    });
+// mongoose
+//     .connect(mongodbURL, {dbName: "postDB"})
+//     .then(() =>{
+//         console.log("App connected to database");
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//     });
 
 //Importing the routes
 import postsRoute from './routes/posts.route';
