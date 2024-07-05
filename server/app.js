@@ -4,8 +4,8 @@ const app = express();
 // For parsing json
 app.use(express.json());
 
-import mongoose from 'mongoose'
-import { mongodbURL } from './config';
+// import mongoose from 'mongoose'
+// import { mongodbURL } from './config';
 
 // mongoose
 //     .connect(mongodbURL, {dbName: "postDB"})
