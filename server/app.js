@@ -1,4 +1,4 @@
-import express from 'express'
+import express from "express";
 const app = express();
 
 // For parsing json
@@ -17,15 +17,15 @@ app.use(express.json());
 //     });
 
 //Importing the routes
-import productRoute from './routes/product.route';
+import productRoute from "./routes/product.route.js";
 app.use("/api/product", productRoute);
 
-import userRoute from './routes/user.route';
+import userRoute from "./routes/user.route.js";
 app.use("/api/user", userRoute);
 
 //Default URL
-app.use("/", (req, res)=>{
-    res.send("Invalid URL!");
+app.use("/", (req, res) => {
+  res.send("Invalid URL!");
 });
 
 export default app;

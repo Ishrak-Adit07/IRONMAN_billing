@@ -1,6 +1,6 @@
-import app from './app';
+import app from "./app.js";
 const PORT = 4000;
 
-app.listen(PORT, (req, res)=>{
-    console.log(`IRONMAN server is running at http://localhost:${PORT}`);
+app.listen(PORT, (req, res) => {
+  console.log(`IRONMAN server is running at http://localhost:${PORT}`);
 });

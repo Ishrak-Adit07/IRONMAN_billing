@@ -1,10 +1,9 @@
-import express from 'express';
-import { getProduct, setProduct } from '../controllers/product.controller';
+import express from "express";
+import { getProduct, setProduct } from "../controllers/product.controller.js";
 const router = express.Router();
 
-
-router.get("/", async(req, res)=>{
-    res.status(200).send("Product route is available");
+router.get("/", async (req, res) => {
+  res.status(200).send("Product route is available");
 });
 
 router.post("/get", getProduct);
