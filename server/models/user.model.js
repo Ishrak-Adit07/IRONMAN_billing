@@ -1,20 +1,18 @@
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
-// const userSchema = mongoose.Schema(
-//     {
-//         name: {
-//             type: String,
-//             required: true
-//         },
-//         password: {
-//             type: String,
-//         }
-//     },
-//     {
-//         timestamps: true
-//     }
-// );
+const userSchema = mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        password: {
+            type: String,
+        }
+    },
+    {
+        timestamps: true
+    }
+);
 
-// export const User = mongoose.model('User', userSchema);
-
-//dummy
+export const User = mongoose.model('User', userSchema);
