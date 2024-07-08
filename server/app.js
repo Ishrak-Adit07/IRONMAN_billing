@@ -4,17 +4,21 @@ const app = express();
 import mongoose from 'mongoose'
 import { mongodbURL } from './config';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 // For parsing json
 app.use(express.json());
 
-mongoose
-    .connect(mongodbURL, {dbName: "IronmanDB"})
-    .then(() =>{
-        console.log("App connected to database");
-    })
-    .catch((err)=>{
-        console.log(err);
-    });
+// mongoose
+//     .connect(mongodbURL, {dbName: "IronmanDB"})
+//     .then(() =>{
+//         console.log("App connected to database");
+//     })
+//     .catch((err)=>{
+//         console.log(err);
+//     });
+
 
 //Importing the routes
 import productRoute from "./routes/product.route.js";
@@ -28,6 +32,6 @@ app.use("/", (req, res) => {
   res.send("Invalid URL!");
 });
 
-export default app;
+export {app};
 
 //

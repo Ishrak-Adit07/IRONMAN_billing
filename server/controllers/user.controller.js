@@ -1,10 +1,27 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { User } from '../models/user.model';
+import sdk from 'node-appwrite';
 
 import dotenv from 'dotenv';
 dotenv.config();
 
+// Initialize Appwrite client
+const client = new sdk.Client();
+
+client
+    .setEndpoint(process.env.APPWRITE_ENDPOINT) // Your Appwrite endpoint
+    .setProject(process.env.APPWRITE_PROJECT_ID) // Your project ID
+
+client
+    .setEndpoint(process.env.APPWRITE_ENDPOINT)
+    .setProject(process.env.APPWRITE_PROJECT_ID)
+    .setKey(process.env.APPWRITE_API_KEY);
+
+console.log("Appwrite database connected");
+const databases = new sdk.Databases(client);
+
+const databaseId = '668c09b0001d9a591bbf'; // Your database ID
+const collectionId = '668c09c2002a67016572';    // Your collection ID
 
 const createToken = (_id) =>{
     return jwt.sign({_id}, process.env.SECRET_WEB_KEY, {expiresIn: "10d"});
@@ -13,6 +30,7 @@ const createToken = (_id) =>{
 const registerUser = async(req, res)=>{
 
     const {name, password} = req.body;
+    console.log(name);
 
     try {
 
@@ -22,7 +40,8 @@ const registerUser = async(req, res)=>{
     
         else{
     
-            const exist = await User.findOne({name});
+            //const exist = await User.findOne({name});
+            const exist = false;
             if(exist){
                 res.status(404).send({error: "Name is already in use"});
             }
@@ -30,11 +49,15 @@ const registerUser = async(req, res)=>{
                 
                 const salt = await bcrypt.genSalt();
                 const hashedPassword = await bcrypt.hash(password, salt);
-                const user = await User.create({name, password:hashedPassword});
+                const userData = {
+                    name,
+                    password: hashedPassword,
+                }
+                const registerResponse = await databases.createDocument(databaseId, collectionId, 'unique()', userData);
 
-                const webToken = createToken(user._id);
-                
-                res.status(201).send({name, webToken});
+                //const webToken = createToken(user._id);
+
+                res.status(201).send({registerResponse});
 
             }
     
