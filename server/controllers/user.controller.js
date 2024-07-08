@@ -1,5 +1,10 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { User } from '../models/user.model';
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const createToken = (_id) =>{
     return jwt.sign({_id}, process.env.SECRET_WEB_KEY, {expiresIn: "10d"});
@@ -7,30 +12,29 @@ const createToken = (_id) =>{
 
 const registerUser = async(req, res)=>{
 
-    const {email, password} = req.body;
-    console.log(email);
+    const {name, password} = req.body;
 
     try {
 
-        if(!email || !password){
+        if(!name || !password){
             res.status(404).send({error: "All fields required"});
         }
     
         else{
     
-            const exist = await User.findOne({email});
+            const exist = await User.findOne({name});
             if(exist){
-                res.status(404).send({error: "Email is already in use"});
+                res.status(404).send({error: "Name is already in use"});
             }
             else{
                 
                 const salt = await bcrypt.genSalt();
                 const hashedPassword = await bcrypt.hash(password, salt);
-                const user = await User.create({email, password:hashedPassword});
+                const user = await User.create({name, password:hashedPassword});
 
                 const webToken = createToken(user._id);
                 
-                res.status(201).send({email, webToken});
+                res.status(201).send({name, webToken});
 
             }
     
@@ -44,17 +48,17 @@ const registerUser = async(req, res)=>{
 
 const loginUser = async(req, res)=>{
 
-    const {email, password} = req.body;
+    const {name, password} = req.body;
 
-    if(!email || !password){
+    if(!name || !password){
         res.status(404).send({error: "All fields are required"});
     }
 
     try {
         
-        const user = await User.findOne({email});
+        const user = await User.findOne({name});
         if(!user){
-            res.status(404).send({error: "No such email found"});
+            res.status(404).send({error: "No such user found"});
         }
         else{
             const match = await bcrypt.compare(password, user.password);
@@ -63,7 +67,7 @@ const loginUser = async(req, res)=>{
             }
             else{
                 const webToken = createToken(user._id);
-                res.status(201).send({email, webToken});
+                res.status(201).send({name, webToken});
             }
         }
 
