@@ -10,16 +10,6 @@ dotenv.config();
 // For parsing json
 app.use(express.json());
 
-// mongoose
-//     .connect(mongodbURL, {dbName: "IronmanDB"})
-//     .then(() =>{
-//         console.log("App connected to database");
-//     })
-//     .catch((err)=>{
-//         console.log(err);
-//     });
-
-
 //Importing the routes
 import productRoute from "./routes/product.route.js";
 app.use("/api/product", productRoute);
@@ -32,6 +22,4 @@ app.use("/", (req, res) => {
   res.send("Invalid URL!");
 });
 
-export {app};
-
-//
+export default app;
