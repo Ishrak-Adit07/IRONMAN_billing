@@ -29,7 +29,7 @@ const registerUser = async(req, res)=>{
         else{
     
             const exist = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
-            if(exist.total != 0){
+            if(exist.response.total != 0){
                 res.status(404).send({success:false, error: "Name is already in use"});
             }
             else{
@@ -63,16 +63,16 @@ const loginUser = async(req, res)=>{
     try {
         
         const user = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
-        if(user.total === 0){
+        if(user.response.total === 0){
             res.status(404).send({success:false, error: "No such user found"});
         }
         else{
-            const match = await bcrypt.compare(password, user.documents[0].password);
+            const match = await bcrypt.compare(password, user.response.documents[0].password);
             if(!match){
                 res.status(404).send({success:false, error: "Invalid Credentials"});
             }
             else{
-                const webToken = createToken(user.documents[0].$id);
+                const webToken = createToken(user.response.documents[0].$id);
                 res.status(201).send({success:true, name, webToken});
             }
         }
@@ -95,11 +95,11 @@ const deleteUser = async(req, res)=>{
     try {
         
         const user = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
-        if(user.total === 0){
+        if(user.response.total === 0){
             res.status(404).send({success:false, error: "No such user found"});
         }
         else{
-            const deleteUserResponse = await deleteDocument(process.env.APPWRITE_USER_COLLECTION_ID, user.documents[0].$id);
+            const deleteUserResponse = await deleteDocument(process.env.APPWRITE_USER_COLLECTION_ID, user.response.documents[0].$id);
             res.status(201).send({success:true, message: "User " + name + " is deleted"});
         }
 

@@ -24,8 +24,8 @@ const getProduct = async(req, res)=> {
             ];
     
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
-            if(exist.total != 0){
-                const product = exist.documents[0];
+            if(exist.response.total != 0){
+                const product = exist.response.documents[0];
                 res.status(200).send({success:true, product});
             }
             else{
@@ -56,8 +56,8 @@ const getProductsByName = async(req, res)=> {
         else{
     
             const exist = await findDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, "name", name);
-            if(exist.total != 0){
-                const products = exist.documents;
+            if(exist.response.total != 0){
+                const products = exist.response.documents;
                 res.status(200).send({success:true, products});
             }
             else{
@@ -86,8 +86,8 @@ const getProductsByType = async(req, res)=> {
         else{
     
             const exist = await findDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, "type", type);
-            if(exist.total != 0){
-                const products = exist.documents;
+            if(exist.response.total != 0){
+                const products = exist.response.documents;
                 res.status(200).send({success:true, products});
             }
             else{
@@ -128,7 +128,7 @@ const addProduct = async(req, res)=> {
             ];
     
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
-            if(exist.total != 0){
+            if(exist.response.total != 0){
                 res.status(404).send({success:false, error: "This product is already present"});
             }
             else{
@@ -176,8 +176,8 @@ const deleteProduct = async(req, res)=>{
             ];
     
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
-            if(exist.total != 0){
-                const deleteProductResponse = await deleteDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id);
+            if(exist.response.total != 0){
+                const deleteProductResponse = await deleteDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.response.documents[0].$id);
                 res.status(201).send({success:true, message: "Product " + name + " of type " + type + " is deleted"});
             }
             else{
@@ -219,14 +219,16 @@ const editPrice = async(req, res) =>{
             ];
     
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
-            const oldPrice = exist.documents[0].price;
-            if(exist.total != 0){
+            
+            if(exist.response.total != 0){
+
+                const oldPrice = exist.response.documents[0].price;
 
                 const updates = {
                     price: newPrice,
                 }
 
-                const updatePriceResponse = await updateSingleDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id, updates);
+                const updatePriceResponse = await updateSingleDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.response.documents[0].$id, updates);
                 res.status(201).send({success:true, message: "Price of product " + name + " of type " + type + " is updated from " + oldPrice + " to " + newPrice});
             }
             else{
