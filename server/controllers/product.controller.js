@@ -1,4 +1,4 @@
-import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes } from "../database/appwrite.queries";
+import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, updateDocument } from "../database/appwrite.queries";
 
 const getProduct = async(req, res)=> {
     
@@ -198,8 +198,50 @@ const deleteProduct = async(req, res)=>{
 
 const editPrice = async(req, res) =>{
 
-    const {name, type} = req.body;
-    console.log("Editing price");
+    const {name, type, newPrice} = req.body;
+
+    try {
+
+        if(!name || !type || !newPrice){
+            res.status(404).send({error: "All fields required"});
+        }
+    
+        else{
+
+            const prodcutAttributes = [
+                {
+                    name: "name",
+                    value: name
+                },
+                {
+                    name: "type",
+                    value: type
+                },
+            ];
+    
+            const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
+            const oldPrice = exist.documents[0].price;
+            if(exist.total != 0){
+
+                const updates = {
+                    price: newPrice,
+                }
+
+                const updatePriceResponse = await updateDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id, updates);
+                res.status(201).send({message: "Price of product " + name + " of type " + type + " is updated from " + oldPrice + " to " + newPrice});
+            }
+            else{
+
+                res.status(404).send({message: "Cannot find this product"});
+
+            }
+    
+        }
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).send({error:e.message});
+    }
 
 }
 
