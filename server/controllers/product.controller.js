@@ -1,4 +1,4 @@
-import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, updateDocument } from "../database/appwrite.queries";
+import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, updateSingleDocument } from "../database/appwrite.queries";
 
 const getProduct = async(req, res)=> {
     
@@ -227,7 +227,7 @@ const editPrice = async(req, res) =>{
                     price: newPrice,
                 }
 
-                const updatePriceResponse = await updateDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id, updates);
+                const updatePriceResponse = await updateSingleDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id, updates);
                 res.status(201).send({message: "Price of product " + name + " of type " + type + " is updated from " + oldPrice + " to " + newPrice});
             }
             else{

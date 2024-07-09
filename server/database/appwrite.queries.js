@@ -66,7 +66,24 @@ const deleteDocument = async(collectionId, documentId) => {
 
 }
 
-const updateDocument = async(collectionId, documentId, updates) => {
+const deleteMultipleDocuments = async (collectionId, attributes) => {
+
+    try {
+
+        const documents = await findDocumentByMultipleAttributes(collectionId, attributes);
+        
+        for (const document of documents) {
+            deleteDocument(collectionId, document.$id);
+        }
+
+        return { success: true, message: `${documents.length} documents updated.` };
+    } catch (err) {
+        console.log(err);
+        return { success: false, error: err.message };
+    }
+};
+
+const updateSingleDocument = async(collectionId, documentId, updates) => {
 
     try {
         
@@ -81,6 +98,23 @@ const updateDocument = async(collectionId, documentId, updates) => {
 
 }
 
+const updateMultipleDocuments = async (collectionId, attributes, updates) => {
+
+    try {
+
+        const documents = await findDocumentByMultipleAttributes(collectionId, attributes);
+        
+        for (const document of documents) {
+            updateSingleDocument(collectionId, document.$id, updates);
+        }
+
+        return { success: true, message: `${documents.length} documents updated.` };
+    } catch (err) {
+        console.log(err);
+        return { success: false, error: err.message };
+    }
+};
 
 
-export { findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument, updateDocument }
+
+export { findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument, updateSingleDocument, updateMultipleDocuments }
