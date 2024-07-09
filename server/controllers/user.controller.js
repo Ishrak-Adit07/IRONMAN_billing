@@ -19,7 +19,6 @@ const createToken = (_id) =>{
 const registerUser = async(req, res)=>{
 
     const {name, password} = req.body;
-    console.log(name);
 
     try {
 
@@ -66,17 +65,17 @@ const loginUser = async(req, res)=>{
 
     try {
         
-        const user = await User.findOne({name});
-        if(!user){
+        const user = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
+        if(user.total === 0){
             res.status(404).send({error: "No such user found"});
         }
         else{
-            const match = await bcrypt.compare(password, user.password);
+            const match = await bcrypt.compare(password, user.documents[0].password);
             if(!match){
                 res.status(404).send({error: "Invalid Credentials"});
             }
             else{
-                const webToken = createToken(user._id);
+                const webToken = createToken(user.documents[0].$id);
                 res.status(201).send({name, webToken});
             }
         }
