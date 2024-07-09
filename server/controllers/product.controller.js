@@ -1,8 +1,8 @@
-import { createDocument, findDocumentByMultipleAttributes } from "../database/appwrite.queries";
+import { createDocument, findDocument, findDocumentByMultipleAttributes } from "../database/appwrite.queries";
 
 const getProduct = async(req, res)=> {
     
-    const {name, type} = req.body;
+    const {name, type} = req.params;
     console.log(name, type);
 
     try {
@@ -46,7 +46,7 @@ const getProduct = async(req, res)=> {
 
 const getProductsByName = async(req, res)=> {
     
-    const {name} = req.body;
+    const {name} = req.params;
 
     try {
 
@@ -76,7 +76,7 @@ const getProductsByName = async(req, res)=> {
 
 const getProductsByType = async(req, res)=> {
     
-    const {type} = req.body;
+    const {type} = req.params;
 
     try {
 
@@ -154,6 +154,4 @@ const setProduct = async(req, res)=> {
 
 }
 
-export {getProduct, setProduct}
-
-//dummy
+export {getProduct, setProduct, getProductsByName, getProductsByType}

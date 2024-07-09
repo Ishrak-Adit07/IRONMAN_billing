@@ -8,8 +8,7 @@ router.get("/", async (req, res) => {
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.post("/delete", deleteUser);
+
+router.delete("/delete", deleteUser);
 
 export default router;
-
-//dummy
