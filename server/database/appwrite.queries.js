@@ -29,4 +29,17 @@ const createDocument = async(collectionId, userData) =>{
 
 }
 
-export { findDocument, createDocument }
+const deleteDocument = async(collectionId, documentId) => {
+
+    try {
+        
+        const response = await databases.deleteDocument(process.env.APPWRITE_DB_ID, collectionId, documentId);
+        return response;
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+export { findDocument, createDocument, deleteDocument }

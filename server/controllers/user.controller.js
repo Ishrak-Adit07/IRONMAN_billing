@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 import dotenv from 'dotenv';
-import { createDocument, findDocument } from '../database/appwrite.queries';
+import { createDocument, deleteDocument, findDocument } from '../database/appwrite.queries';
 dotenv.config();
 
 const encryptPassword = async(password) =>{
@@ -87,4 +87,31 @@ const loginUser = async(req, res)=>{
 
 }
 
-export { registerUser, loginUser }
+const deleteUser = async(req, res)=>{
+
+    const {name} = req.body;
+
+    if(!name){
+        res.status(404).send({error: "Name is required"});
+    }
+
+    try {
+        
+        const user = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
+        if(user.total === 0){
+            res.status(404).send({error: "No such user found"});
+        }
+        else{
+            const deleteUserResponse = await deleteDocument(process.env.APPWRITE_USER_COLLECTION_ID, user.documents[0].$id);
+            res.status(201).send({message: "User " + name + " is deleted"});
+        }
+
+    } catch (e) {
+        console.log(e);
+        res.status(404).send({error:e.message});
+    }
+
+}
+
+
+export { registerUser, loginUser, deleteUser }
