@@ -9,10 +9,10 @@ const findDocument = async(collectionId, attribute, value) =>{
             process.env.APPWRITE_DB_ID, collectionId, [
             Query.equal(attribute, [value])
         ]);
-        return response;
+        return {success:true, response};
 
     } catch (err) {
-        console.log(err);
+        return { success: false, error: err.message };
     }
 
 }
@@ -28,10 +28,10 @@ const findDocumentByMultipleAttributes = async (collectionId, attributes) => {
         const response = await databases.listDocuments(
             process.env.APPWRITE_DB_ID, collectionId, queries
         );
-        
-        return response;
+        return {success:true, response};
+
     } catch (err) {
-        console.error("Error finding document by attributes:", err);
+        return { success: false, error: err.message };
     }
 }
 
@@ -43,10 +43,10 @@ const createDocument = async(collectionId, userData) =>{
         const response = await databases.createDocument(
             process.env.APPWRITE_DB_ID, collectionId, sdk.ID.unique(), userData
         );
-        return response;
+        return {success:true, response};
 
     } catch (err) {
-        console.log(err);
+        return { success: false, error: err.message };
     }
 
 }
@@ -58,10 +58,10 @@ const deleteDocument = async(collectionId, documentId) => {
         const response = await databases.deleteDocument(
             process.env.APPWRITE_DB_ID, collectionId, documentId
         );
-        return response;
+        return {success:true, response};
 
     } catch (err) {
-        console.log(err);
+        return { success: false, error: err.message };
     }
 
 }
@@ -75,8 +75,8 @@ const deleteMultipleDocuments = async (collectionId, attributes) => {
         for (const document of documents) {
             deleteDocument(collectionId, document.$id);
         }
+        return {success:true, response};
 
-        return { success: true, message: `${documents.length} documents updated.` };
     } catch (err) {
         console.log(err);
         return { success: false, error: err.message };
@@ -90,10 +90,10 @@ const updateSingleDocument = async(collectionId, documentId, updates) => {
         const response = await databases.updateDocument(
             process.env.APPWRITE_DB_ID, collectionId, documentId,updates
         );
-        return response;
+        return {success:true, response};
 
     } catch (err) {
-        console.log(err);
+        return { success: false, error: err.message };
     }
 
 }
@@ -107,14 +107,12 @@ const updateMultipleDocuments = async (collectionId, attributes, updates) => {
         for (const document of documents) {
             updateSingleDocument(collectionId, document.$id, updates);
         }
+        return {success:true, response};
 
-        return { success: true, message: `${documents.length} documents updated.` };
     } catch (err) {
         console.log(err);
         return { success: false, error: err.message };
     }
 };
 
-
-
-export { findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument, updateSingleDocument, updateMultipleDocuments }
+export { findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument, deleteMultipleDocuments, updateSingleDocument, updateMultipleDocuments }

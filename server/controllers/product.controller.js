@@ -7,7 +7,7 @@ const getProduct = async(req, res)=> {
     try {
 
         if(!name || !type){
-            res.status(404).send({error: "All fields required"});
+            res.status(404).send({success:false, error: "All fields required"});
         }
     
         else{
@@ -26,11 +26,11 @@ const getProduct = async(req, res)=> {
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
             if(exist.total != 0){
                 const product = exist.documents[0];
-                res.status(200).send({product});
+                res.status(200).send({success:true, product});
             }
             else{
 
-                res.status(404).send({message: "Cannot find this product"});
+                res.status(404).send({success:false, message: "Cannot find this product"});
 
             }
     
@@ -38,7 +38,7 @@ const getProduct = async(req, res)=> {
         
     } catch (e) {
         console.log(e);
-        res.status(400).send({error:e.message});
+        res.status(400).send({success:false, error:e.message});
     }
 
 }
@@ -50,7 +50,7 @@ const getProductsByName = async(req, res)=> {
     try {
 
         if(!name){
-            res.status(404).send({error: "Product name is required"});
+            res.status(404).send({success:false, error: "Product name is required"});
         }
     
         else{
@@ -58,17 +58,17 @@ const getProductsByName = async(req, res)=> {
             const exist = await findDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, "name", name);
             if(exist.total != 0){
                 const products = exist.documents;
-                res.status(200).send({products});
+                res.status(200).send({success:true, products});
             }
             else{
-                res.status(404).send({message: "No such products"});
+                res.status(404).send({success:false, message: "No such products"});
             }
     
         }
         
     } catch (e) {
         console.log(e);
-        res.status(400).send({error:e.message});
+        res.status(400).send({success:false, error:e.message});
     }
 
 }
@@ -80,7 +80,7 @@ const getProductsByType = async(req, res)=> {
     try {
 
         if(!type){
-            res.status(404).send({error: "Product type is required"});
+            res.status(404).send({success:false, error: "Product type is required"});
         }
     
         else{
@@ -88,17 +88,17 @@ const getProductsByType = async(req, res)=> {
             const exist = await findDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, "type", type);
             if(exist.total != 0){
                 const products = exist.documents;
-                res.status(200).send({products});
+                res.status(200).send({success:true, products});
             }
             else{
-                res.status(404).send({message: "No such products"});
+                res.status(404).send({success:false, message: "No such products"});
             }
     
         }
         
     } catch (e) {
         console.log(e);
-        res.status(400).send({error:e.message});
+        res.status(400).send({success:false, error:e.message});
     }
 
 }
@@ -111,7 +111,7 @@ const addProduct = async(req, res)=> {
     try {
 
         if(!name || !type || !price){
-            res.status(404).send({error: "All fields required"});
+            res.status(404).send({success:false, error: "All fields required"});
         }
     
         else{
@@ -129,7 +129,7 @@ const addProduct = async(req, res)=> {
     
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
             if(exist.total != 0){
-                res.status(404).send({error: "This product is already present"});
+                res.status(404).send({success:false, error: "This product is already present"});
             }
             else{
                 
@@ -139,8 +139,7 @@ const addProduct = async(req, res)=> {
                     price,
                 }
                 const createProductResponse = await createDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, productData);
-
-                res.status(201).send({createProductResponse});
+                res.status(201).send({success:true, createProductResponse});
 
             }
     
@@ -148,7 +147,7 @@ const addProduct = async(req, res)=> {
         
     } catch (e) {
         console.log(e);
-        res.status(400).send({error:e.message});
+        res.status(400).send({success:false, error:e.message});
     }
 
 }
@@ -160,7 +159,7 @@ const deleteProduct = async(req, res)=>{
     try {
 
         if(!name || !type){
-            res.status(404).send({error: "All fields required"});
+            res.status(404).send({success:false, error: "All fields required"});
         }
     
         else{
@@ -179,11 +178,11 @@ const deleteProduct = async(req, res)=>{
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
             if(exist.total != 0){
                 const deleteProductResponse = await deleteDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id);
-                res.status(201).send({message: "Product " + name + " of type " + type + " is deleted"});
+                res.status(201).send({success:true, message: "Product " + name + " of type " + type + " is deleted"});
             }
             else{
 
-                res.status(404).send({message: "Cannot find this product"});
+                res.status(404).send({success:false, message: "Cannot find this product"});
 
             }
     
@@ -191,7 +190,7 @@ const deleteProduct = async(req, res)=>{
         
     } catch (e) {
         console.log(e);
-        res.status(400).send({error:e.message});
+        res.status(400).send({success:false, error:e.message});
     }
 
 }
@@ -203,7 +202,7 @@ const editPrice = async(req, res) =>{
     try {
 
         if(!name || !type || !newPrice){
-            res.status(404).send({error: "All fields required"});
+            res.status(404).send({success:false, error: "All fields required"});
         }
     
         else{
@@ -228,11 +227,11 @@ const editPrice = async(req, res) =>{
                 }
 
                 const updatePriceResponse = await updateSingleDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id, updates);
-                res.status(201).send({message: "Price of product " + name + " of type " + type + " is updated from " + oldPrice + " to " + newPrice});
+                res.status(201).send({success:true, message: "Price of product " + name + " of type " + type + " is updated from " + oldPrice + " to " + newPrice});
             }
             else{
 
-                res.status(404).send({message: "Cannot find this product"});
+                res.status(404).send({success:false, message: "Cannot find this product"});
 
             }
     
@@ -240,7 +239,7 @@ const editPrice = async(req, res) =>{
         
     } catch (e) {
         console.log(e);
-        res.status(400).send({error:e.message});
+        res.status(400).send({success:false, error:e.message});
     }
 
 }
