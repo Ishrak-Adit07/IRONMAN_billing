@@ -1,24 +1,9 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-// import sdk from 'node-appwrite';
 
 import dotenv from 'dotenv';
 import { createDocument, findDocument } from '../database/appwrite.queries';
 dotenv.config();
-
-// Initialize Appwrite client
-// const client = new sdk.Client();
-
-// client
-//     .setEndpoint(process.env.APPWRITE_ENDPOINT)
-//     .setProject(process.env.APPWRITE_PROJECT_ID)
-//     .setKey(process.env.APPWRITE_API_KEY);
-
-// console.log("Appwrite database connected");
-// const databases = new sdk.Databases(client);
-
-// const databaseId = '668c09b0001d9a591bbf';
-// const collectionId = '668c09c2002a67016572';
 
 const createToken = (_id) =>{
     return jwt.sign({_id}, process.env.SECRET_WEB_KEY, {expiresIn: "10d"});
@@ -38,8 +23,7 @@ const registerUser = async(req, res)=>{
         else{
     
             const exist = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
-            //const exist = false;
-            if(exist){
+            if(exist.total != 0){
                 res.status(404).send({error: "Name is already in use"});
             }
             else{
