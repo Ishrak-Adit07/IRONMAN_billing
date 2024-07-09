@@ -16,6 +16,23 @@ const findDocument = async(collectionId, attribute, value) =>{
 
 }
 
+const findDocumentByMultipleAttributes = async (collectionId, attributes) => {
+    try {
+        // Construct the query array
+        const queries = attributes.map(attribute => {
+            return Query.equal(attribute.name, attribute.value);
+        });
+
+        // Perform the search
+        const response = await databases.listDocuments(process.env.APPWRITE_DB_ID, collectionId, queries);
+        
+        return response;
+    } catch (err) {
+        console.error("Error finding document by attributes:", err);
+    }
+}
+
+
 const createDocument = async(collectionId, userData) =>{
 
     try {
@@ -42,4 +59,4 @@ const deleteDocument = async(collectionId, documentId) => {
 
 }
 
-export { findDocument, createDocument, deleteDocument }
+export { findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument }
