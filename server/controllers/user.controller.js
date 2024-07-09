@@ -5,6 +5,13 @@ import dotenv from 'dotenv';
 import { createDocument, findDocument } from '../database/appwrite.queries';
 dotenv.config();
 
+const encryptPassword = async(password) =>{
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    return hashedPassword;
+}
+
 const createToken = (_id) =>{
     return jwt.sign({_id}, process.env.SECRET_WEB_KEY, {expiresIn: "10d"});
 };
@@ -28,8 +35,7 @@ const registerUser = async(req, res)=>{
             }
             else{
                 
-                const salt = await bcrypt.genSalt();
-                const hashedPassword = await bcrypt.hash(password, salt);
+                const hashedPassword = await encryptPassword(password);
                 const userData = {
                     name,
                     password: hashedPassword,
