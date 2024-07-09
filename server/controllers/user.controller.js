@@ -1,27 +1,24 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import sdk from 'node-appwrite';
+// import sdk from 'node-appwrite';
 
 import dotenv from 'dotenv';
+import { createDocument } from '../database/appwrite.queries';
 dotenv.config();
 
 // Initialize Appwrite client
-const client = new sdk.Client();
+// const client = new sdk.Client();
 
-client
-    .setEndpoint(process.env.APPWRITE_ENDPOINT) // Your Appwrite endpoint
-    .setProject(process.env.APPWRITE_PROJECT_ID) // Your project ID
+// client
+//     .setEndpoint(process.env.APPWRITE_ENDPOINT)
+//     .setProject(process.env.APPWRITE_PROJECT_ID)
+//     .setKey(process.env.APPWRITE_API_KEY);
 
-client
-    .setEndpoint(process.env.APPWRITE_ENDPOINT)
-    .setProject(process.env.APPWRITE_PROJECT_ID)
-    .setKey(process.env.APPWRITE_API_KEY);
+// console.log("Appwrite database connected");
+// const databases = new sdk.Databases(client);
 
-console.log("Appwrite database connected");
-const databases = new sdk.Databases(client);
-
-const databaseId = '668c09b0001d9a591bbf'; // Your database ID
-const collectionId = '668c09c2002a67016572';    // Your collection ID
+// const databaseId = '668c09b0001d9a591bbf';
+// const collectionId = '668c09c2002a67016572';
 
 const createToken = (_id) =>{
     return jwt.sign({_id}, process.env.SECRET_WEB_KEY, {expiresIn: "10d"});
@@ -53,7 +50,8 @@ const registerUser = async(req, res)=>{
                     name,
                     password: hashedPassword,
                 }
-                const registerResponse = await databases.createDocument(databaseId, collectionId, 'unique()', userData);
+                // const registerResponse = await databases.createDocument(databaseId, collectionId, 'unique()', userData);
+                const registerResponse = await createDocument(process.env.APPWRITE_USER_COLLECTION_ID, userData)
 
                 //const webToken = createToken(user._id);
 
