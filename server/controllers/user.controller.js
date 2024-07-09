@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 // import sdk from 'node-appwrite';
 
 import dotenv from 'dotenv';
-import { createDocument } from '../database/appwrite.queries';
+import { createDocument, findDocument } from '../database/appwrite.queries';
 dotenv.config();
 
 // Initialize Appwrite client
@@ -37,8 +37,8 @@ const registerUser = async(req, res)=>{
     
         else{
     
-            //const exist = await User.findOne({name});
-            const exist = false;
+            const exist = await findDocument(process.env.APPWRITE_USER_COLLECTION_ID, "name", name);
+            //const exist = false;
             if(exist){
                 res.status(404).send({error: "Name is already in use"});
             }
@@ -50,12 +50,11 @@ const registerUser = async(req, res)=>{
                     name,
                     password: hashedPassword,
                 }
-                // const registerResponse = await databases.createDocument(databaseId, collectionId, 'unique()', userData);
-                const registerResponse = await createDocument(process.env.APPWRITE_USER_COLLECTION_ID, userData)
+                const registerResponse = await createDocument(process.env.APPWRITE_USER_COLLECTION_ID, userData);
 
-                //const webToken = createToken(user._id);
+                const webToken = createToken(registerResponse.$id);
 
-                res.status(201).send({registerResponse});
+                res.status(201).send({name, webToken});
 
             }
     

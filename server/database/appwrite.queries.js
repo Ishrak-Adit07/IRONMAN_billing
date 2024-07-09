@@ -1,10 +1,13 @@
-import {client, databases} from './appwrite.connect';
+import { Query } from 'node-appwrite';
+import {sdk, client, databases} from './appwrite.connect';
 
-const createDocument = async(collectionId, userData) =>{
+const findDocument = async(collectionId, attribute, value) =>{
 
     try {
         
-        const response = await databases.createDocument(process.env.APPWRITE_DB_ID, collectionId, 'unique()', userData);
+        const response = await databases.listDocuments(process.env.APPWRITE_DB_ID, collectionId, [
+            Query.equal(attribute, [value])
+        ]);
         return response;
 
     } catch (err) {
@@ -13,4 +16,17 @@ const createDocument = async(collectionId, userData) =>{
 
 }
 
-export {createDocument}
+const createDocument = async(collectionId, userData) =>{
+
+    try {
+        
+        const response = await databases.createDocument(process.env.APPWRITE_DB_ID, collectionId, sdk.ID.unique(), userData);
+        return response;
+
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+export { findDocument, createDocument }

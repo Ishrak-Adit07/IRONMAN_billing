@@ -13,4 +13,4 @@ client
 const databases = new sdk.Databases(client);
 console.log("Appwrite database connected");
 
-export {client, databases};
+export {sdk, client, databases};
