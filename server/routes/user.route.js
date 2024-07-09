@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, registerUser } from "../controllers/user.controller.js";
+import { deleteUser, loginUser, registerUser } from "../controllers/user.controller.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -7,9 +7,8 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/register", registerUser);
-
 router.post("/login", loginUser);
 
-export default router;
+router.delete("/delete", deleteUser);
 
-//dummy
+export default router;
