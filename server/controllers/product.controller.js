@@ -1,9 +1,8 @@
-import { createDocument, findDocument, findDocumentByMultipleAttributes } from "../database/appwrite.queries";
+import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes } from "../database/appwrite.queries";
 
 const getProduct = async(req, res)=> {
     
     const {name, type} = req.params;
-    console.log(name, type);
 
     try {
 
@@ -104,7 +103,7 @@ const getProductsByType = async(req, res)=> {
 
 }
 
-const setProduct = async(req, res)=> {
+const addProduct = async(req, res)=> {
 
     const {name, type, price} = req.body;
     console.log(name, type);
@@ -154,4 +153,54 @@ const setProduct = async(req, res)=> {
 
 }
 
-export {getProduct, setProduct, getProductsByName, getProductsByType}
+const deleteProduct = async(req, res)=>{
+
+    const {name, type} = req.body;
+
+    try {
+
+        if(!name || !type){
+            res.status(404).send({error: "All fields required"});
+        }
+    
+        else{
+
+            const prodcutAttributes = [
+                {
+                    name: "name",
+                    value: name
+                },
+                {
+                    name: "type",
+                    value: type
+                },
+            ];
+    
+            const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
+            if(exist.total != 0){
+                const deleteProductResponse = await deleteDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, exist.documents[0].$id);
+                res.status(201).send({message: "Product " + name + " of type " + type + " is deleted"});
+            }
+            else{
+
+                res.status(404).send({message: "Cannot find this product"});
+
+            }
+    
+        }
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).send({error:e.message});
+    }
+
+}
+
+const editPrice = async(req, res) =>{
+
+    const {name, type} = req.body;
+    console.log("Editing price");
+
+}
+
+export {getProduct, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice}
