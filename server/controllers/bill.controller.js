@@ -1,9 +1,8 @@
 import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, getAllDocuments } from "../database/appwrite.queries";
-import { getProductIDs, getProductPricesByIDs } from "./product.controller";
+import { getProductDetails } from "./product.controller";
 
-const generateBill = async(bill) =>{
-    const {products, quantities} = bill;
-    const productPrices = await getProductPricesByIDs(products);
+const generateBill = (bill) =>{
+    const {products, quantities, productPrices} = bill;
     let totals = [];
     let totalBill = 0;
 
@@ -12,7 +11,6 @@ const generateBill = async(bill) =>{
         totalBill += totals[i];
     }
 
-    bill.productPrices = productPrices;
     bill.totals = totals;
     bill.totalBill = totalBill;
 
@@ -144,16 +142,17 @@ const createBill = async (req, res) => {
             return;
         }
 
-        const billProducts = await getProductIDs(products);
+        const {billProducts, productPrices} = await getProductDetails(products);
 
         let billDetails = {
             employee,
             client,
             products: billProducts,
             quantities,
+            productPrices
         };
 
-        billDetails = await generateBill(billDetails);
+        billDetails = generateBill(billDetails);
 
         const createBillResponse = await createDocument(process.env.APPWRITE_BILL_COLLECTION_ID, billDetails);
         if (createBillResponse.success) {
@@ -165,6 +164,7 @@ const createBill = async (req, res) => {
         }
 
     } catch (e) {
+        console.log(e);
         res.status(400).send({ success: false, error: e.message });
     }
 };

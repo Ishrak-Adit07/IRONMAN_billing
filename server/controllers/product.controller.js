@@ -43,11 +43,12 @@ const getProduct = async(req, res)=> {
 
 }
 
-const getProductIDs = async(products) =>{
+const getProductDetails = async(products) =>{
 
     try {
 
         let billProducts = [];
+        let productPrices = [];
         for (const product of products) {
 
             const productAttributes = [
@@ -59,6 +60,7 @@ const getProductIDs = async(products) =>{
             if (exist.response.total != 0) {
                 const existProduct = exist.response.documents[0];
                 billProducts.push(existProduct.$id);
+                productPrices.push(existProduct.price);
             } 
             else {
                 res.status(404).send({ success: false, error: `Product ${product.name} of type ${product.type} is not found` });
@@ -66,7 +68,7 @@ const getProductIDs = async(products) =>{
             }
         }
 
-        return billProducts;
+        return {billProducts, productPrices};
 
     } catch (error) {
         res.status(400).send({success:false, error:e.message});
@@ -303,4 +305,4 @@ const editPrice = async(req, res) =>{
 
 }
 
-export { getProduct, getProductIDs, getProductPricesByIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }
+export { getProduct, getProductDetails, getProductPricesByIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }
