@@ -63,6 +63,34 @@ const getProduct = async(name, type) =>{
 
 }
 
+const addProductPrice = async (name, type, price) => {
+    
+    if (!name || !type || !price) {
+        throw Error("All fields are required");
+    }
+
+    try {
+        const addProductResponse = await fetch('/api/product/add', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, type, price })
+        });
+
+        const responseData = await addProductResponse.json();
+
+        if (!addProductResponse.ok) {
+            throw Error(responseData.error);
+        }
+
+        return responseData;
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw Error(error.message);
+    }
+}
+
 const editProductPrice = async (name, type, newPrice) => {
     
     if (!name || !type || !newPrice) {
@@ -119,4 +147,4 @@ const deleteProduct = async (name, type) => {
     }
 }
 
-export { getProducts, getProduct, editProductPrice, deleteProduct }
+export { getProducts, getProduct, addProductPrice, editProductPrice, deleteProduct }
