@@ -1,4 +1,24 @@
-import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, updateSingleDocument } from "../database/appwrite.queries";
+import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, getAllDocuments, updateSingleDocument } from "../database/appwrite.queries";
+
+const getProducts = async(req, res)=> {
+    
+    try {
+
+    const exist = await getAllDocuments(process.env.APPWRITE_PRODUCT_COLLECTION_ID);
+    if(exist.response.total != 0){
+        const products = exist.response.documents;
+        res.status(200).send({success:true, products});
+    }
+    else{
+        res.status(404).send({success:false, message: "No products available"});
+    }
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).send({success:false, error:e.message});
+    }
+
+}
 
 const getProduct = async(req, res)=> {
     
@@ -305,4 +325,4 @@ const editPrice = async(req, res) =>{
 
 }
 
-export { getProduct, getProductDetails, getProductPricesByIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }
+export { getProducts, getProduct, getProductDetails, getProductPricesByIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }

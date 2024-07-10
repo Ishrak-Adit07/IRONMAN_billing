@@ -1,5 +1,6 @@
 
 const registerUser = async (name, password, confirmPassword) => {
+    
     if (!name || !password || !confirmPassword) {
         throw Error("All fields are required");
     }

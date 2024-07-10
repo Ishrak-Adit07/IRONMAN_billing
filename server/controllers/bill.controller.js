@@ -23,8 +23,7 @@ const getBills = async(req, res)=> {
 
         const billResponse = await getAllDocuments(process.env.APPWRITE_BILL_COLLECTION_ID);
         if(billResponse.response.total != 0){
-            let bills = billResponse.response.documents;
-
+            const bills = billResponse.response.documents;
             res.status(200).send({success:true, bills});
         }
         else{
