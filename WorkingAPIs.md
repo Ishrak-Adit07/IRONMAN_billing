@@ -28,11 +28,15 @@
 - **Body:**
   ```json
   {
-    "name": "Jon Snow",
+    "name": "Jon Snow"
   }
 
 
 ## Product
+
+### Get All Products
+- **Endpoint:** `http://localhost:4000/api/product/get`
+- **Method:** `GET`
 
 ### Get Product by Name and Type
 - **Endpoint:** `http://localhost:4000/api/product/get/:name/:type`
@@ -61,8 +65,7 @@
   {
     "name": "Product Name",
     "type": "Product Type",
-    "price": 100,
-    "description": "Product Description"
+    "price": 100
   }
 
 ### Edit Product Price
@@ -83,7 +86,7 @@
   ```json
   {
     "name": "Product Name",
-    "type": "Product Type",
+    "type": "Product Type"
   }
 
 ## Bill
@@ -128,10 +131,7 @@
 - **Body:**
   ```json
   {
-    "name": "Product Name",
-    "type": "Product Type",
-    "price": 100,
-    "description": "Product Description"
+    "date": "Desired date",
   }
 
 ### Get All Bills Within Two Dates
@@ -141,9 +141,7 @@
 - **Body:**
   ```json
   {
-    "name": "Product Name",
-    "type": "Product Type",
-    "price": 100,
-    "description": "Product Description"
+    "date1": "Date1",
+    "date2": "Date2",
   }
 
