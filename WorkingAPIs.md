@@ -92,7 +92,7 @@
 ## Bill
 
 ### Get All Bills
-- **Endpoint:** `http://localhost:4000/api/bill/get`
+- **Endpoint:** `http://localhost:4000/api/bill`
 - **Method:** `GET`
 
 ### Get Bill By ID
