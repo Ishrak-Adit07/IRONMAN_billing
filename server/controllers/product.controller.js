@@ -12,7 +12,7 @@ const getProduct = async(req, res)=> {
     
         else{
 
-            const prodcutAttributes = [
+            const productAttributes = [
                 {
                     name: "name",
                     value: name
@@ -23,7 +23,7 @@ const getProduct = async(req, res)=> {
                 },
             ];
     
-            const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, prodcutAttributes);
+            const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, productAttributes);
             if(exist.response.total != 0){
                 const product = exist.response.documents[0];
                 res.status(200).send({success:true, product});
@@ -38,6 +38,37 @@ const getProduct = async(req, res)=> {
         
     } catch (e) {
         console.log(e);
+        res.status(400).send({success:false, error:e.message});
+    }
+
+}
+
+const getProductIDs = async(products) =>{
+
+    try {
+
+        let billProducts = [];
+        for (const product of products) {
+
+            const productAttributes = [
+                { name: "name", value: product.name },
+                { name: "type", value: product.type },
+            ];
+
+            const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, productAttributes);
+            if (exist.response.total !== 0) {
+                const existProduct = exist.response.documents[0];
+                billProducts.push(existProduct.$id);
+            } 
+            else {
+                res.status(404).send({ success: false, error: `Product ${product.name} of type ${product.type} is not found` });
+                return;
+            }
+        }
+
+        return billProducts;
+
+    } catch (error) {
         res.status(400).send({success:false, error:e.message});
     }
 
@@ -246,4 +277,4 @@ const editPrice = async(req, res) =>{
 
 }
 
-export {getProduct, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice}
+export { getProduct, getProductIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }
