@@ -54,9 +54,6 @@ const loginUser = async (name, password) => {
             throw Error(responseData.error);
         }
 
-        // localStorage.setItem("webToken", responseData.webToken);
-        // localStorage.setItem("email", responseData.email);
-
         return responseData;
     } catch (error) {
         console.error("Error:", error.message);
