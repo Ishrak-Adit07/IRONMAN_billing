@@ -12,22 +12,22 @@
       "product2_id",
       "product3_id"
     ],
-    "productPrices": [
-      "product1_price",
-      "product2_price",
-      "product3_price"
-    ],
     "quantities": [
       10,
       15,
       10
     ],
-    "totals": [
-      "product1_total",
-      "product2_total",
-      "product3_total"
+    "productPrices": [
+      "product1_price",
+      "product2_price",
+      "product3_price"
     ],
-    "totalBill": 200,
+    "totals": [
+      1000,
+      180,
+      200
+    ],
+    "totalBill": 1380,
     "$id": "bill_id",
     "$tenant": "******",
     "$createdAt": "2024-07-10T06:25:56.965+00:00",
