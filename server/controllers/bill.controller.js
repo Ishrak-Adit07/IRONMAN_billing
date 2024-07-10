@@ -33,15 +33,14 @@ const getBillByID = async(req, res)=> {
     
         else{
     
-            const exist = await findDocument(process.env.APPWRITE_BILL_COLLECTION_ID, "id", id);
+            const exist = await findDocument(process.env.APPWRITE_BILL_COLLECTION_ID, "$id", id);
             if(exist.response.total != 0){
-                const bill = exist.response.document[0];
+                const bill = exist.response.documents[0];
                 res.status(200).send({success:true, bill});
             }
             else{
                 res.status(404).send({success:false, message: "No such bill"});
-            }
-    
+            }    
         }
         
     } catch (e) {
@@ -52,11 +51,61 @@ const getBillByID = async(req, res)=> {
 }
 
 const getBillsByEmployee = async(req, res)=> {
-    console.log("Get Bill");
+    
+    const {employee} = req.params;
+
+    try {
+
+        if(!employee){
+            res.status(404).send({success:false, error: "Employee is required"});
+        }
+    
+        else{
+    
+            const exist = await findDocument(process.env.APPWRITE_BILL_COLLECTION_ID, "employee", employee);
+            if(exist.response.total != 0){
+                const bill = exist.response.documents[0];
+                res.status(200).send({success:true, bill});
+            }
+            else{
+                res.status(404).send({success:false, message: "No such bill"});
+            }    
+        }
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).send({success:false, error:e.message});
+    }
+
 }
 
 const getBillsByClient = async(req, res)=> {
-    console.log("Get Bill");
+    
+    const {client} = req.params;
+
+    try {
+
+        if(!client){
+            res.status(404).send({success:false, error: "Client is required"});
+        }
+    
+        else{
+    
+            const exist = await findDocument(process.env.APPWRITE_BILL_COLLECTION_ID, "client", client);
+            if(exist.response.total != 0){
+                const bill = exist.response.documents[0];
+                res.status(200).send({success:true, bill});
+            }
+            else{
+                res.status(404).send({success:false, message: "No such bill"});
+            }    
+        }
+        
+    } catch (e) {
+        console.log(e);
+        res.status(400).send({success:false, error:e.message});
+    }
+
 }
 
 const getBillsByDate = async(req, res)=> {
@@ -108,5 +157,3 @@ const deleteBill = async(req, res)=> {
 
 
 export { getBills, getBillByID, getBillsByClient, getBillsByEmployee, getBillsByDate, getBillsByDateRange, createBill, deleteBill }
-
-//dummy
