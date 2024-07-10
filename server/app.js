@@ -11,11 +11,14 @@ dotenv.config();
 app.use(express.json());
 
 //Importing the routes
+import userRoute from "./routes/user.route.js";
+app.use("/api/user", userRoute);
+
 import productRoute from "./routes/product.route.js";
 app.use("/api/product", productRoute);
 
-import userRoute from "./routes/user.route.js";
-app.use("/api/user", userRoute);
+import billRoute from "./routes/bill.route.js";
+app.use("/api/bill", billRoute);
 
 //Default URL
 app.use("/", (req, res) => {

@@ -4,15 +4,14 @@ const getBills = async(req, res)=> {
     
     try {
 
-        const billResponse = await getAllDocuments(process.env.APPWRITE_PRODUCT_COLLECTION_ID);
-        // if(billResponse.response.total != 0){
-        //     const bills = billResponse.response.documents;
-        //     res.status(200).send({success:true, bills});
-        // }
-        // else{
-        //     res.status(404).send({success:false, message: "No bills found"});
-        // }
-        res.send(billResponse);
+        const billResponse = await getAllDocuments(process.env.APPWRITE_BILL_COLLECTION_ID);
+        if(billResponse.response.total != 0){
+            const bills = billResponse.response.documents;
+            res.status(200).send({success:true, bills});
+        }
+        else{
+            res.status(404).send({success:false, message: "No bills found"});
+        }
                 
     } catch (e) {
         console.log(e);
