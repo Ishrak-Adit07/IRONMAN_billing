@@ -82,4 +82,89 @@ const getBillsByEmployee = async(employee) =>{
 
 }
 
-export { getBills, getBillByID, getBillsByClient, getBillsByEmployee }
+const getBillsByDate = async(date) =>{
+
+    if (!date) {
+        throw Error("Bill date is required");
+    }
+
+    try {
+        const getBillResponse = await fetch('/api/bill/get/date', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ date })
+        });
+        const responseData = await getBillResponse.json();
+
+        if (!registerResponse.ok) {
+            throw Error(responseData.error);
+        }
+
+        return responseData;
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw Error(error.message);
+    }
+
+}
+
+const getBillsByDateRange = async(date1, date2) =>{
+
+    if (!date1 || !date2) {
+        throw Error("Bill dates are required");
+    }
+
+    try {
+        const getBillResponse = await fetch('/api/bill/get/dates', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ date1, date2 })
+        });
+        const responseData = await getBillResponse.json();
+
+        if (!registerResponse.ok) {
+            throw Error(responseData.error);
+        }
+
+        return responseData;
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw Error(error.message);
+    }
+
+}
+
+const deleteBilll = async(date) =>{
+
+    if (!date) {
+        throw Error("Bill date is required");
+    }
+
+    try {
+        const getBillResponse = await fetch('/api/bill/get/date', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ date })
+        });
+        const responseData = await getBillResponse.json();
+
+        if (!registerResponse.ok) {
+            throw Error(responseData.error);
+        }
+
+        return responseData;
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw Error(error.message);
+    }
+
+}
+
+
+export { getBills, getBillByID, getBillsByClient, getBillsByEmployee, getBillsByDate, getBillsByDateRange }
