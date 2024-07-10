@@ -65,6 +65,27 @@
     "description": "Product Description"
   }
 
+### Edit Product Price
+- **Endpoint:** `http://localhost:4000/api/product/price`
+- **Method:** `PUT`
+- **Body:**
+  ```json
+  {
+    "name": "Product Name",
+    "type": "Product Type",
+    "newPrice": 100
+  }
+
+### Delete Product
+- **Endpoint:** `http://localhost:4000/api/product/delete`
+- **Method:** `DELETE`
+- **Body:**
+  ```json
+  {
+    "name": "Product Name",
+    "type": "Product Type",
+  }
+
 
 
 ## Bill
