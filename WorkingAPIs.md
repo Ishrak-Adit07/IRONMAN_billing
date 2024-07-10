@@ -34,6 +34,38 @@
 
 ## Product
 
+### Get Product by Name and Type
+- **Endpoint:** `http://localhost:4000/api/product/get/:name/:type`
+- **Method:** `GET`
+- **Parameters:**
+  - `name` (string): The name of the product
+  - `type` (string): The type of the product
+
+### Get Products by Name
+- **Endpoint:** `http://localhost:4000/api/product/name/:name`
+- **Method:** `GET`
+- **Parameters:**
+  - `name` (string): The name of the product
+
+### Get Products by Type
+- **Endpoint:** `http://localhost:4000/api/product/type/:type`
+- **Method:** `GET`
+- **Parameters:**
+  - `type` (string): The type of the product
+
+### Add Product
+- **Endpoint:** `http://localhost:4000/api/product/add`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "name": "Product Name",
+    "type": "Product Type",
+    "price": 100,
+    "description": "Product Description"
+  }
+
+
 
 ## Bill
 
