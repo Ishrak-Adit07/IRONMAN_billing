@@ -1,4 +1,4 @@
-import { createDocument, findDocument, findDocumentByMultipleAttributes, getAllDocuments } from "../database/appwrite.queries";
+import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, getAllDocuments } from "../database/appwrite.queries";
 import { getProductIDs } from "./product.controller";
 
 const getBills = async(req, res)=> {
@@ -102,7 +102,6 @@ const getBillsByClient = async(req, res)=> {
         }
         
     } catch (e) {
-        console.log(e);
         res.status(400).send({success:false, error:e.message});
     }
 
@@ -150,8 +149,26 @@ const createBill = async (req, res) => {
 };
 
 
-const deleteBill = async(req, res)=> {
-    console.log("Delete Bill");
+const deleteBill = async(req, res)=>{
+
+    const {id} = req.body;
+
+    try {
+
+        if(!id){
+            res.status(404).send({success:false, error: "Bill id is required"});
+            return;
+        }
+    
+        const deleteBillResponse = await deleteDocument(process.env.APPWRITE_BILL_COLLECTION_ID, id);
+        
+        if(deleteBillResponse.success) res.status(201).send({success:true, message: "Bill with id " + id + " is deleted"});
+        else res.status(400).send({ success: false, error: "Could not delete bill, please try again" });
+        
+    } catch (e) {
+        res.status(400).send({success:false, error:e.message});
+    }
+
 }
 
 
