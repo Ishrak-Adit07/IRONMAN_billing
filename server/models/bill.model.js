@@ -1,16 +1,3 @@
-// const billSchema = mongoose.Schema(
-//     {
-//         items: [itemSchema],
-//         totalBill: {
-//             type: Number,
-//             required: true
-//         }
-//     },
-//     {
-//         timestamps: true
-//     }
-// );
-
 bill: {
         employee: "668cc610cd153e2cdd17"
         client: "Artisan"
