@@ -138,23 +138,23 @@ const getBillsByDateRange = async(date1, date2) =>{
 
 }
 
-const deleteBilll = async(date) =>{
+const deleteBilll = async(id) =>{
 
-    if (!date) {
-        throw Error("Bill date is required");
+    if (!id) {
+        throw Error("Bill id is required");
     }
 
     try {
-        const getBillResponse = await fetch('/api/bill/get/date', {
-            method: "POST",
+        const deleteBillResponse = await fetch('/api/bill/delete', {
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ date })
+            body: JSON.stringify({ id })
         });
-        const responseData = await getBillResponse.json();
+        const responseData = await deleteBillResponse.json();
 
-        if (!registerResponse.ok) {
+        if (!deleteBillResponse.ok) {
             throw Error(responseData.error);
         }
 
