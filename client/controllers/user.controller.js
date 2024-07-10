@@ -1,4 +1,3 @@
-
 const registerUser = async (name, password, confirmPassword) => {
     
     if (!name || !password || !confirmPassword) {
