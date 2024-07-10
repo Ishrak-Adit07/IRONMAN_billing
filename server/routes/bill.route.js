@@ -1,16 +1,16 @@
 import express from 'express';
-import { getBill, setBill } from '../controllers/bill.controller';
+import { createBill, deleteBill, getBillByID, getBills, getBillsByClient, getBillsByDate, getBillsByDateRange, getBillsByEmployee } from '../controllers/bill.controller';
 const router = express.Router();
 
+router.get("/get", getBills);
+router.get("/get/id/:id", getBillByID);
+router.get("/get/client/:client", getBillsByClient);
+router.get("/get/employee/:employee", getBillsByEmployee);
 
-router.get("/", async(req, res)=>{
-    res.status(200).send("Bill route is available");
-});
+router.post("/create", createBill);
+router.post("/get/date", getBillsByDate);
+router.post("/get/dates", getBillsByDateRange);
 
-router.post("/get", getBill);
-
-router.post("/set", setBill);
+router.delete("/delete", deleteBill);
 
 export default router;
-
-//dummy

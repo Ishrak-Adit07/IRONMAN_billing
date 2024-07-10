@@ -1,6 +1,20 @@
 import { Query } from 'node-appwrite';
 import {sdk, client, databases} from './appwrite.connect';
 
+const getAllDocuments = async(collectionId) =>{
+
+    try {
+        
+        const response = await databases.listDocuments(
+            process.env.APPWRITE_DB_ID, collectionId
+        );
+        return {success:true, response};
+
+    } catch (err) {
+        return { success: false, error: err.message };
+    }
+
+}
 const findDocument = async(collectionId, attribute, value) =>{
 
     try {
@@ -115,4 +129,4 @@ const updateMultipleDocuments = async (collectionId, attributes, updates) => {
     }
 };
 
-export { findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument, deleteMultipleDocuments, updateSingleDocument, updateMultipleDocuments }
+export { getAllDocuments, findDocument, findDocumentByMultipleAttributes, createDocument, deleteDocument, deleteMultipleDocuments, updateSingleDocument, updateMultipleDocuments }
