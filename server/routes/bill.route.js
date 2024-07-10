@@ -4,8 +4,8 @@ const router = express.Router();
 
 router.get("/get", getBills);
 router.get("/get/id/:id", getBillByID);
-router.get("/get/client/:client", getBillsByClient);
 router.get("/get/employee/:employee", getBillsByEmployee);
+router.get("/get/client/:client", getBillsByClient);
 
 router.post("/create", createBill);
 router.post("/get/date", getBillsByDate);
