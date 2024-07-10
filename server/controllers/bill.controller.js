@@ -1,5 +1,23 @@
 import { createDocument, deleteDocument, findDocument, findDocumentByMultipleAttributes, getAllDocuments } from "../database/appwrite.queries";
-import { getProductIDs } from "./product.controller";
+import { getProductIDs, getProductPricesByIDs } from "./product.controller";
+
+const generateBill = async(bill) =>{
+    const {products, quantities} = bill;
+    const productPrices = await getProductPricesByIDs(products);
+    let totals = [];
+    let totalBill = 0;
+
+    for(let i=0; i<products.length; i++){
+        totals[i] = productPrices[i]*quantities[i];
+        totalBill += totals[i];
+    }
+
+    bill.productPrices = productPrices;
+    bill.totals = totals;
+    bill.totalBill = totalBill;
+
+    return bill;
+}
 
 const getBills = async(req, res)=> {
     
@@ -7,7 +25,8 @@ const getBills = async(req, res)=> {
 
         const billResponse = await getAllDocuments(process.env.APPWRITE_BILL_COLLECTION_ID);
         if(billResponse.response.total != 0){
-            const bills = billResponse.response.documents;
+            let bills = billResponse.response.documents;
+
             res.status(200).send({success:true, bills});
         }
         else{
@@ -127,12 +146,14 @@ const createBill = async (req, res) => {
 
         const billProducts = await getProductIDs(products);
 
-        const billDetails = {
+        let billDetails = {
             employee,
             client,
             products: billProducts,
             quantities,
         };
+
+        billDetails = await generateBill(billDetails);
 
         const createBillResponse = await createDocument(process.env.APPWRITE_BILL_COLLECTION_ID, billDetails);
         if (createBillResponse.success) {
@@ -161,7 +182,7 @@ const deleteBill = async(req, res)=>{
         }
     
         const deleteBillResponse = await deleteDocument(process.env.APPWRITE_BILL_COLLECTION_ID, id);
-        
+
         if(deleteBillResponse.success) res.status(201).send({success:true, message: "Bill with id " + id + " is deleted"});
         else res.status(400).send({ success: false, error: "Could not delete bill, please try again" });
         

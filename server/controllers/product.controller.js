@@ -56,7 +56,7 @@ const getProductIDs = async(products) =>{
             ];
 
             const exist = await findDocumentByMultipleAttributes(process.env.APPWRITE_PRODUCT_COLLECTION_ID, productAttributes);
-            if (exist.response.total !== 0) {
+            if (exist.response.total != 0) {
                 const existProduct = exist.response.documents[0];
                 billProducts.push(existProduct.$id);
             } 
@@ -68,6 +68,32 @@ const getProductIDs = async(products) =>{
 
         return billProducts;
 
+    } catch (error) {
+        res.status(400).send({success:false, error:e.message});
+    }
+
+}
+
+const getProductPricesByIDs = async(productIDs) =>{
+
+    try {
+
+        let productPrices = [];
+        for (const productID of productIDs) {
+
+            const exist = await findDocument(process.env.APPWRITE_PRODUCT_COLLECTION_ID, "$id", productID);
+            if (exist.response.total != 0) {
+                const existProduct = exist.response.documents[0];
+                productPrices.push(existProduct.price);
+            } 
+            else {
+                res.status(404).send({ success: false, error: `Product with id ${productID} is not found` });
+                return;
+            }
+        }
+
+        return productPrices;
+        
     } catch (error) {
         res.status(400).send({success:false, error:e.message});
     }
@@ -277,4 +303,4 @@ const editPrice = async(req, res) =>{
 
 }
 
-export { getProduct, getProductIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }
+export { getProduct, getProductIDs, getProductPricesByIDs, addProduct, getProductsByName, getProductsByType, deleteProduct, editPrice }
