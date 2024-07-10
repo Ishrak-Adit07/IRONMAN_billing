@@ -1,12 +1,35 @@
-# Working API endpoints
+# Working API Endpoints
 
 ## User
-### http:localhost:4000/api/user/register
-method: POST
-body: {
-    "name" : "Jon snow",
-    "password: "jonsnow"
-}
+
+### Register User
+- **Endpoint:** `http://localhost:4000/api/user/register`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "name": "Jon Snow",
+    "password": "jonsnow"
+  }
+
+### Login User
+- **Endpoint:** `http://localhost:4000/api/user/login`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "name": "Jon Snow",
+    "password": "jonsnow"
+  }
+
+### Delete User
+- **Endpoint:** `http://localhost:4000/api/user/delete`
+- **Method:** `DELETE`
+- **Body:**
+  ```json
+  {
+    "name": "Jon Snow",
+  }
 
 
 ## Product
