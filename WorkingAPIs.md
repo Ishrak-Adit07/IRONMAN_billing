@@ -119,7 +119,7 @@
     "id": "Bill id",
   }
 
-### These last two are ready yet
+### These last two are not ready yet
 
 ### Get Bills Of A Certain Date
 - **This is not ready yet**
