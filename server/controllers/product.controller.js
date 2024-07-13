@@ -63,6 +63,43 @@ const getProduct = async (req, res) => {
   }
 };
 
+const getProductPrice = async (req, res) => {
+  const { name, type } = req.params;
+
+  try {
+    if (!name || !type) {
+      res.status(404).send({ success: false, error: "All fields required" });
+    } else {
+      const productAttributes = [
+        {
+          name: "name",
+          value: name,
+        },
+        {
+          name: "type",
+          value: type,
+        },
+      ];
+
+      const exist = await findDocumentByMultipleAttributes(
+        process.env.APPWRITE_PRODUCT_COLLECTION_ID,
+        productAttributes
+      );
+      if (exist.response.total != 0) {
+        const price = exist.response.documents[0].price;
+        res.status(200).send({ success: true, price });
+      } else {
+        res
+          .status(404)
+          .send({ success: false, message: "Cannot find this product" });
+      }
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ success: false, error: e.message });
+  }
+};
+
 const getProductDetails = async (products) => {
   try {
     let billProducts = [];
@@ -336,6 +373,7 @@ const editPrice = async (req, res) => {
 export {
   getProducts,
   getProduct,
+  getProductPrice,
   getProductDetails,
   getProductPricesByIDs,
   addProduct,

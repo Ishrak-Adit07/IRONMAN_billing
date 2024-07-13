@@ -45,6 +45,13 @@
   - `name` (string): The name of the product
   - `type` (string): The type of the product
 
+  ### Get Product Price Only by Name and Type
+- **Endpoint:** `http://localhost:4000/api/product/get/price/:name/:type`
+- **Method:** `GET`
+- **Parameters:**
+  - `name` (string): The name of the product
+  - `type` (string): The type of the product
+
 ### Get Products by Name
 - **Endpoint:** `http://localhost:4000/api/product/name/:name`
 - **Method:** `GET`
