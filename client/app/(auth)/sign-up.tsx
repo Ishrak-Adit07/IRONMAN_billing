@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextInput, Button, View } from "react-native";
+import { TextInput, Button, View, Pressable, Text } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 
@@ -27,8 +27,6 @@ export default function SignUpScreen() {
 
       setPendingVerification(true);
     } catch (err: any) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
   };
@@ -50,39 +48,52 @@ export default function SignUpScreen() {
         console.error(JSON.stringify(completeSignUp, null, 2));
       }
     } catch (err: any) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
   };
 
   return (
-    <View>
+    <View className="flex-auto bg-slate-300">
       {!pendingVerification && (
         <>
           <TextInput
             autoCapitalize="none"
+            className="mt-10 basis-14 w-4/5 pl-2 bg-gray-300 self-center justify-center border rounded-md"
             value={emailAddress}
             placeholder="Email..."
+            placeholderTextColor={"#000003"}
             onChangeText={(email) => setEmailAddress(email)}
           />
           <TextInput
+            className="mt-3 basis-14 w-4/5 pl-2 bg-gray-300 self-center justify-center border rounded-md"
             value={password}
             placeholder="Password..."
+            placeholderTextColor={"#000003"}
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
           />
-          <Button title="Sign Up" onPress={onSignUpPress} />
+          <Pressable
+            className="mt-5 border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 justify-center self-center"
+            onPress={onSignUpPress}
+          >
+            <Text className="self-center text-lg font-bold">SignUp</Text>
+          </Pressable>
         </>
       )}
       {pendingVerification && (
         <>
           <TextInput
+            className="mt-3 basis-14 w-4/5 pl-2 bg-gray-300 self-center justify-center border rounded-md"
             value={code}
             placeholder="Code..."
             onChangeText={(code) => setCode(code)}
           />
-          <Button title="Verify Email" onPress={onPressVerify} />
+          <Pressable
+            className="mt-5 border-2 border-indigo-500 border-b-indigo-500 bg-orange-400 rounded-md h-12 w-40 justify-center self-center"
+            onPress={onPressVerify}
+          >
+            <Text className="self-center text-lg font-bold">Verify Email</Text>
+          </Pressable>
         </>
       )}
     </View>
