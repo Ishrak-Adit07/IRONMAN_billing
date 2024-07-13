@@ -45,15 +45,12 @@ const findDocumentByMultipleAttributes = async (collectionId, attributes) => {
   }
 };
 
-const findDocumentWithinRange = async (collectionId, attribute, date1, date2) => {
+const findDocumentsWithinRange = async (collectionId, attribute, value1, value2) => {
   try {
     const response = await databases.listDocuments(
       process.env.APPWRITE_DB_ID,
       collectionId,
-      [
-        sdk.Query.greaterEqual(attribute, date1),
-        sdk.Query.lesserEqual(attribute, date2)
-      ]
+      [Query.between(attribute, value1, value2)]
     );
     return { success: true, response };
   } catch (err) {
@@ -153,7 +150,7 @@ export {
   getAllDocuments,
   findDocument,
   findDocumentByMultipleAttributes,
-  findDocumentWithinRange,
+  findDocumentsWithinRange,
   findDocumentByStartsWith,
   createDocument,
   deleteDocument,

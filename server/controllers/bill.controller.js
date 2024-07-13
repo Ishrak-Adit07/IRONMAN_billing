@@ -2,9 +2,8 @@ import {
   createDocument,
   deleteDocument,
   findDocument,
-  findDocumentByMultipleAttributes,
   findDocumentByStartsWith,
-  findDocumentWithinRange,
+  findDocumentsWithinRange,
   getAllDocuments,
 } from "../database/appwrite.queries.js";
 import { getProductDetails } from "./product.controller.js";
@@ -156,16 +155,17 @@ const getBillsByDateRange = async (req, res) => {
   date2 = date2 + "T23:59:59.999+00:00";
 
   try {
-    const exist = await findDocumentWithinRange(
+    const exist = await findDocumentsWithinRange(
       process.env.APPWRITE_BILL_COLLECTION_ID,
       "$createdAt",
       date1,
-      "$createdAt",
       date2
     );
 
     if (exist.success && exist.response.total === 0) {
-      res.status(404).send({ success: false, error: "No bills found in this date range" });
+      res
+        .status(404)
+        .send({ success: false, error: "No bills found in this date range" });
     } else if (exist.success) {
       const bills = exist.response.documents;
       res.status(200).send({ success: true, bills });
