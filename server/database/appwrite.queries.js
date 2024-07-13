@@ -12,6 +12,7 @@ const getAllDocuments = async (collectionId) => {
     return { success: false, error: err.message };
   }
 };
+
 const findDocument = async (collectionId, attribute, value) => {
   try {
     const response = await databases.listDocuments(
@@ -37,6 +38,35 @@ const findDocumentByMultipleAttributes = async (collectionId, attributes) => {
       process.env.APPWRITE_DB_ID,
       collectionId,
       queries
+    );
+    return { success: true, response };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+};
+
+const findDocumentWithinRange = async (collectionId, attribute, date1, date2) => {
+  try {
+    const response = await databases.listDocuments(
+      process.env.APPWRITE_DB_ID,
+      collectionId,
+      [
+        sdk.Query.greaterEqual(attribute, date1),
+        sdk.Query.lesserEqual(attribute, date2)
+      ]
+    );
+    return { success: true, response };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+};
+
+const findDocumentByStartsWith = async (collectionId, attribute, value) => {
+  try {
+    const response = await databases.listDocuments(
+      process.env.APPWRITE_DB_ID,
+      collectionId,
+      [sdk.Query.startsWith(attribute, value)]
     );
     return { success: true, response };
   } catch (err) {
@@ -123,6 +153,8 @@ export {
   getAllDocuments,
   findDocument,
   findDocumentByMultipleAttributes,
+  findDocumentWithinRange,
+  findDocumentByStartsWith,
   createDocument,
   deleteDocument,
   deleteMultipleDocuments,

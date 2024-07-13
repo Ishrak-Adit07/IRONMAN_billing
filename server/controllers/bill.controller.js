@@ -3,6 +3,8 @@ import {
   deleteDocument,
   findDocument,
   findDocumentByMultipleAttributes,
+  findDocumentByStartsWith,
+  findDocumentWithinRange,
   getAllDocuments,
 } from "../database/appwrite.queries.js";
 import { getProductDetails } from "./product.controller.js";
@@ -115,11 +117,65 @@ const getBillsByClient = async (req, res) => {
 };
 
 const getBillsByDate = async (req, res) => {
-  console.log("Get Bill");
+  const { date } = req.body;
+  if (!date) {
+    console.log("Date is required");
+    res.status(404).send({ success: false, error: "Date is required" });
+    return;
+  }
+
+  try {
+    const exist = await findDocumentByStartsWith(
+      process.env.APPWRITE_BILL_COLLECTION_ID,
+      "$createdAt",
+      date
+    );
+    if (exist.response.total === 0) {
+      res
+        .status(404)
+        .send({ success: false, error: "No bills found on this date" });
+    } else {
+      const bills = exist.response.documents;
+      res.status(200).send({ success: true, bills });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ success: false, error: e.message });
+  }
 };
 
 const getBillsByDateRange = async (req, res) => {
-  console.log("Get Bill");
+  let { date1, date2 } = req.body;
+  if (!date1 || !date2) {
+    console.log("Both dates are required");
+    res.status(400).send({ success: false, error: "Both dates are required" });
+    return;
+  }
+
+  date1 = date1 + "T00:00:00.000+00:00";
+  date2 = date2 + "T23:59:59.999+00:00";
+
+  try {
+    const exist = await findDocumentWithinRange(
+      process.env.APPWRITE_BILL_COLLECTION_ID,
+      "$createdAt",
+      date1,
+      "$createdAt",
+      date2
+    );
+
+    if (exist.success && exist.response.total === 0) {
+      res.status(404).send({ success: false, error: "No bills found in this date range" });
+    } else if (exist.success) {
+      const bills = exist.response.documents;
+      res.status(200).send({ success: true, bills });
+    } else {
+      res.status(400).send({ success: false, error: exist.error });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(400).send({ success: false, error: e.message });
+  }
 };
 
 const createBill = async (req, res) => {
