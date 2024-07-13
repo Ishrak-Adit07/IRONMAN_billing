@@ -113,6 +113,33 @@
 - **Parameters:**
   - `client` (string): The client of the bills
 
+### Create Bill
+
+- **Endpoint:** `http://localhost:4000/api/bill/create`
+- **Method:** `POST`
+- **Body:**
+  ```json
+  {
+    "employee": "668cc610cd153e2cdd17",
+    "client": "Artisan",
+    "products": [
+      {
+        "name": "Shirt",
+        "type": "Drywash"
+      },
+      {
+        "name": "Pant",
+        "type": "Iron"
+      },
+      {
+        "name": "Pant",
+        "type": "Laundry"
+      }
+    ],
+    "quantities": [10, 15, 10]
+  }
+
+
 ### Delete Bill
 - **Endpoint:** `http://localhost:4000/api/bill/delete`
 - **Method:** `DELETE`
