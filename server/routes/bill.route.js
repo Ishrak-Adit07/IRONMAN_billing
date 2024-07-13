@@ -1,5 +1,14 @@
-import express from 'express';
-import { createBill, deleteBill, getBillByID, getBills, getBillsByClient, getBillsByDate, getBillsByDateRange, getBillsByEmployee } from '../controllers/bill.controller';
+import express from "express";
+import {
+  createBill,
+  deleteBill,
+  getBillByID,
+  getBills,
+  getBillsByClient,
+  getBillsByDate,
+  getBillsByDateRange,
+  getBillsByEmployee,
+} from "../controllers/bill.controller.js";
 const router = express.Router();
 
 router.get("/", getBills);

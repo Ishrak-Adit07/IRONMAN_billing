@@ -26,6 +26,11 @@ export default function Page() {
           >
             <Text className="self-center text-lg font-bold">Sign Out</Text>
           </Pressable>
+          <Pressable className="border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 items-center justify-center">
+            <Link href="/bill-calculate">
+              <Text className="text-lg font-bold text-center">Make Bill</Text>{" "}
+            </Link>
+          </Pressable>
         </View>
       </SignedIn>
       <SignedOut>
@@ -35,7 +40,6 @@ export default function Page() {
               <Text className="text-xl font-bold text-center">Sign In</Text>
             </Link>
           </Pressable>
-
           <Pressable className="border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 items-center justify-center">
             <Link href="/sign-up">
               <Text className="text-lg font-bold text-center">Sign Up</Text>{" "}

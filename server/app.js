@@ -1,10 +1,10 @@
 import express from "express";
 const app = express();
 
-import mongoose from 'mongoose'
-import { mongodbURL } from './config';
+import mongoose from "mongoose";
+import { mongodbURL } from "./config.js";
 
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 // For parsing json
