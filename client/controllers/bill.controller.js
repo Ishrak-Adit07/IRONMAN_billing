@@ -138,6 +138,33 @@ const getBillsByDateRange = async(date1, date2) =>{
 
 }
 
+const createBill = async(employee, client, products, quantities) =>{
+    if (!employee || !client || products.length===0 || quantities.length===0) {
+        throw Error("All fields are required");
+    }
+
+    try {
+        const createBillResponse = await fetch('/api/bill/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ employee, client, products, quantities })
+        });
+
+        const responseData = await createBillResponse.json();
+
+        if (!createBillResponse.ok) {
+            throw Error(responseData.error);
+        }
+
+        return responseData;
+    } catch (error) {
+        console.error("Error:", error.message);
+        throw Error(error.message);
+    }
+}
+
 const deleteBilll = async(id) =>{
 
     if (!id) {
@@ -167,4 +194,4 @@ const deleteBilll = async(id) =>{
 }
 
 
-export { getBills, getBillByID, getBillsByClient, getBillsByEmployee, getBillsByDate, getBillsByDateRange }
+export { getBills, getBillByID, getBillsByClient, getBillsByEmployee, getBillsByDate, getBillsByDateRange, createBill, deleteBilll }
