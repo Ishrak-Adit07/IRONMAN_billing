@@ -156,26 +156,22 @@
     "id": "Bill id",
   }
 
-### These last two are not ready yet
-
 ### Get Bills Of A Certain Date
-- **This is not ready yet**
 - **Endpoint:** `http://localhost:4000/api/bill/get/date`
 - **Method:** `POST`
 - **Body:**
   ```json
   {
-    "date": "Desired date",
+    "date" : "2024-07-13"
   }
 
 ### Get All Bills Within Two Dates
-- **This is not ready yet**
 - **Endpoint:** `http://localhost:4000/api/bill/get/dates`
 - **Method:** `POST`
 - **Body:**
   ```json
   {
-    "date1": "Date1",
-    "date2": "Date2",
+    "date1" : "2024-07-08",
+    "date2" : "2024-07-10"
   }
 
