@@ -148,8 +148,7 @@
             "quantity" : 15,
             "total" : 225
         }
-    ],
-    "quantities": [10, 15, 10]
+    ]
   }
 
 
