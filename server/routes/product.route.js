@@ -1,5 +1,14 @@
 import express from "express";
-import { addProduct, deleteProduct, editPrice, getProduct, getProductPrice, getProducts, getProductsByName, getProductsByType } from "../controllers/product.controller.js";
+import {
+  addProduct,
+  deleteProduct,
+  editPrice,
+  getProduct,
+  getProductPrice,
+  getProducts,
+  getProductsByName,
+  getProductsByType,
+} from "../controllers/product.controller.js";
 const router = express.Router();
 
 router.get("/", getProducts);
