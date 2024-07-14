@@ -111,7 +111,6 @@ const getBillsByClient = async (req, res) => {
 const getBillsByDate = async (req, res) => {
   const { date } = req.body;
   if (!date) {
-    console.log("Date is required");
     res.status(404).send({ success: false, error: "Date is required" });
     return;
   }
@@ -139,7 +138,6 @@ const getBillsByDate = async (req, res) => {
 const getBillsByDateRange = async (req, res) => {
   let { date1, date2 } = req.body;
   if (!date1 || !date2) {
-    console.log("Both dates are required");
     res.status(400).send({ success: false, error: "Both dates are required" });
     return;
   }
@@ -186,7 +184,6 @@ const createBill = async (req, res) => {
       quantities.push(product.quantity);
       totals.push(product.total);
     }
-    console.log(employee, client, products, quantities, totals);
     const { billProducts, productPrices } = await getProductDetails(products);
 
     const totalBill = getTotalBill(totals);

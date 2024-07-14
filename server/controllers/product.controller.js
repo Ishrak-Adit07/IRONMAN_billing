@@ -92,7 +92,6 @@ const getProductPrice = async (req, res) => {
         res
           .status(404)
           .send({ success: false, message: "Cannot find this product" });
-        console.log("Cannot find this product");
       }
     }
   } catch (e) {
@@ -217,7 +216,6 @@ const getProductsByType = async (req, res) => {
 
 const addProduct = async (req, res) => {
   const { name, type, price } = req.body;
-  console.log(name, type);
 
   try {
     if (!name || !type || !price) {
