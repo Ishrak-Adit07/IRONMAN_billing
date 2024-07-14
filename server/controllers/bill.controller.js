@@ -8,20 +8,13 @@ import {
 } from "../database/appwrite.queries.js";
 import { getProductDetails } from "./product.controller.js";
 
-const generateBill = (bill) => {
-  const { products, quantities, productPrices } = bill;
-  let totals = [];
+const getTotalBill = (totals) => {
   let totalBill = 0;
-
-  for (let i = 0; i < products.length; i++) {
-    totals[i] = productPrices[i] * quantities[i];
+  for (let i = 0; i < totals.length; i++) {
     totalBill += totals[i];
   }
 
-  bill.totals = totals;
-  bill.totalBill = totalBill;
-
-  return bill;
+  return totalBill;
 };
 
 const getBills = async (req, res) => {
@@ -194,8 +187,9 @@ const createBill = async (req, res) => {
       totals.push(product.total);
     }
     console.log(employee, client, products, quantities, totals);
-
     const { billProducts, productPrices } = await getProductDetails(products);
+
+    const totalBill = getTotalBill(totals);
 
     let billDetails = {
       employee,
@@ -203,9 +197,9 @@ const createBill = async (req, res) => {
       products: billProducts,
       quantities,
       productPrices,
+      totalBill,
+      totals
     };
-
-    billDetails = generateBill(billDetails);
 
     const createBillResponse = await createDocument(
       process.env.APPWRITE_BILL_COLLECTION_ID,
