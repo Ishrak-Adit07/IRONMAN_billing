@@ -179,18 +179,21 @@ const getBillsByDateRange = async (req, res) => {
 };
 
 const createBill = async (req, res) => {
-  const { employee, client, products, quantities } = req.body;
+  const { employee, client, products } = req.body;
+  let quantities = [];
+  let totals = [];
 
   try {
-    if (
-      !employee ||
-      !client ||
-      products.length === 0 ||
-      quantities.length === 0
-    ) {
+    if (!employee || !client || products.length === 0) {
       res.status(400).send({ success: false, error: "All fields required" });
       return;
     }
+
+    for (let product of products) {
+      quantities.push(product.quantity);
+      totals.push(product.total);
+    }
+    console.log(employee, client, products, quantities, totals);
 
     const { billProducts, productPrices } = await getProductDetails(products);
 
