@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import axios from "axios";
+import Constants from "expo-constants";
 
 interface Item {
   id: number;
@@ -17,24 +18,24 @@ interface Item {
   price: number;
 }
 
-export default function App() {
+const { manifest } = Constants.manifest2;
+
+export default function billCalc() {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [quantity, setQuantity] = useState("");
   const [items, setItems] = useState<Item[]>([]);
   const [idCounter, setIdCounter] = useState(1);
+  //useEffect(() => {handleAddItem();}, []);
 
   const handleAddItem = async () => {
     if (!name || !type || !quantity) return;
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/api/product/get/:name/:type",
-        {
-          name,
-          type,
-        }
+      const response = await axios.get(
+        `http://192.168.0.105:4000/api/product/get/price/${name}/${type}`
       );
+      console.log("API Response:", response.data);
 
       const price = response.data.price;
 
@@ -88,7 +89,7 @@ export default function App() {
             <Text>
               {item.name} ({item.type}) x{item.quantity}
             </Text>
-            <Text>${item.price}</Text>
+            <Text>${item.price * item.quantity}</Text>
           </View>
         )}
       />

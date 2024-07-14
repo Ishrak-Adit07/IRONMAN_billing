@@ -92,6 +92,7 @@ const getProductPrice = async (req, res) => {
         res
           .status(404)
           .send({ success: false, message: "Cannot find this product" });
+        console.log("Cannot find this product");
       }
     }
   } catch (e) {
@@ -119,12 +120,10 @@ const getProductDetails = async (products) => {
         billProducts.push(existProduct.$id);
         productPrices.push(existProduct.price);
       } else {
-        res
-          .status(404)
-          .send({
-            success: false,
-            error: `Product ${product.name} of type ${product.type} is not found`,
-          });
+        res.status(404).send({
+          success: false,
+          error: `Product ${product.name} of type ${product.type} is not found`,
+        });
         return;
       }
     }
@@ -148,12 +147,10 @@ const getProductPricesByIDs = async (productIDs) => {
         const existProduct = exist.response.documents[0];
         productPrices.push(existProduct.price);
       } else {
-        res
-          .status(404)
-          .send({
-            success: false,
-            error: `Product with id ${productID} is not found`,
-          });
+        res.status(404).send({
+          success: false,
+          error: `Product with id ${productID} is not found`,
+        });
         return;
       }
     }
@@ -291,12 +288,10 @@ const deleteProduct = async (req, res) => {
           process.env.APPWRITE_PRODUCT_COLLECTION_ID,
           exist.response.documents[0].$id
         );
-        res
-          .status(201)
-          .send({
-            success: true,
-            message: "Product " + name + " of type " + type + " is deleted",
-          });
+        res.status(201).send({
+          success: true,
+          message: "Product " + name + " of type " + type + " is deleted",
+        });
       } else {
         res
           .status(404)
@@ -344,20 +339,18 @@ const editPrice = async (req, res) => {
           exist.response.documents[0].$id,
           updates
         );
-        res
-          .status(201)
-          .send({
-            success: true,
-            message:
-              "Price of product " +
-              name +
-              " of type " +
-              type +
-              " is updated from " +
-              oldPrice +
-              " to " +
-              newPrice,
-          });
+        res.status(201).send({
+          success: true,
+          message:
+            "Price of product " +
+            name +
+            " of type " +
+            type +
+            " is updated from " +
+            oldPrice +
+            " to " +
+            newPrice,
+        });
       } else {
         res
           .status(404)
