@@ -129,19 +129,25 @@
   {
     "employee": "668cc610cd153e2cdd17",
     "client": "Artisan",
-    "products": [
-      {
-        "name": "Shirt",
-        "type": "Drywash"
-      },
-      {
-        "name": "Pant",
-        "type": "Iron"
-      },
-      {
-        "name": "Pant",
-        "type": "Laundry"
-      }
+    "products" : [
+        {
+            "name" : "Shirt",
+            "type" : "Drywash",
+            "quantity": 10,
+            "total" : 1000
+        },
+        {
+            "name" : "Pant",
+            "type" : "Iron",
+            "quantity" : 20,
+            "total" : 200
+        },
+        {
+            "name" : "Pant",
+            "type" : "Laundry",
+            "quantity" : 15,
+            "total" : 225
+        }
     ],
     "quantities": [10, 15, 10]
   }
