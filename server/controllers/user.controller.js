@@ -40,7 +40,7 @@ const registerUser = async (req, res) => {
       } else {
         const hashedPassword = await encryptPassword(password);
         const userData = {
-          username,
+          name: username,
           password: hashedPassword,
         };
 
