@@ -2,10 +2,13 @@ import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { Text, TextInput, Button, View, Pressable, Alert } from "react-native";
 import React from "react";
+import { useSession } from "@/controllers/ctx";
 
 export default function Page() {
-  const { signIn, setActive, isLoaded } = useSignIn();
+  // const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
+
+  const { signIn } = useSession();
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -25,29 +28,29 @@ export default function Page() {
     );
   };
 
-  const onSignInPress = React.useCallback(async () => {
-    if (!isLoaded) {
-      return;
-    }
+  // const onSignInPress = React.useCallback(async () => {
+  //   if (!isLoaded) {
+  //     return;
+  //   }
 
-    try {
-      const signInAttempt = await signIn.create({
-        identifier: emailAddress,
-        password,
-      });
+  //   try {
+  //     const signInAttempt = await signIn.create({
+  //       identifier: emailAddress,
+  //       password,
+  //     });
 
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/");
-      } else {
-        alert("ok");
-        console.error(JSON.stringify(signInAttempt, null, 2));
-      }
-    } catch (err: any) {
-      showAlert();
-      console.error(JSON.stringify(err, null, 2));
-    }
-  }, [isLoaded, emailAddress, password]);
+  //     if (signInAttempt.status === "complete") {
+  //       await setActive({ session: signInAttempt.createdSessionId });
+  //       router.replace("/");
+  //     } else {
+  //       alert("ok");
+  //       console.error(JSON.stringify(signInAttempt, null, 2));
+  //     }
+  //   } catch (err: any) {
+  //     showAlert();
+  //     console.error(JSON.stringify(err, null, 2));
+  //   }
+  // }, [isLoaded, emailAddress, password]);
 
   return (
     <View className="flex-auto bg-slate-300">
@@ -55,7 +58,7 @@ export default function Page() {
         className="mt-14 mb-4 basis-14 w-4/5 pl-2 bg-gray-300 self-center justify-center border rounded-md"
         autoCapitalize="none"
         value={emailAddress}
-        placeholder="Email..."
+        placeholder="User Name..."
         placeholderTextColor={"#000003"}
         onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
       />
@@ -69,7 +72,10 @@ export default function Page() {
       />
       <Pressable
         className="mt-5 border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 justify-center self-center"
-        onPress={onSignInPress}
+        onPress={() => {
+          signIn(emailAddress, password);
+          router.replace("/");
+        }}
       >
         <Text className="self-center text-xl font-bold">Sign In</Text>
       </Pressable>

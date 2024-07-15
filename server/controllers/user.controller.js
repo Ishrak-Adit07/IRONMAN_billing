@@ -21,16 +21,17 @@ const createToken = (_id) => {
 };
 
 const registerUser = async (req, res) => {
-  const { name, password } = req.body;
-
+  const { username, password } = req.body;
+  console.log("register", req.body);
+  // let name= req.username;
   try {
-    if (!name || !password) {
+    if (!username || !password) {
       res.status(404).send({ success: false, error: "All fields required" });
     } else {
       const exist = await findDocument(
         process.env.APPWRITE_USER_COLLECTION_ID,
         "name",
-        name
+        username
       );
       if (exist.response.total != 0) {
         res
@@ -39,7 +40,7 @@ const registerUser = async (req, res) => {
       } else {
         const hashedPassword = await encryptPassword(password);
         const userData = {
-          name,
+          username,
           password: hashedPassword,
         };
 
@@ -48,7 +49,7 @@ const registerUser = async (req, res) => {
           userData
         );
         const webToken = createToken(registerResponse.$id);
-        res.status(201).send({ success: true, name, webToken });
+        res.status(201).send({ success: true, username, webToken });
       }
     }
   } catch (e) {
@@ -58,9 +59,10 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { name, password } = req.body;
+  const { username, password } = req.body;
+  console.log(req.body);
 
-  if (!name || !password) {
+  if (!username || !password) {
     res.status(404).send({ success: false, error: "All fields are required" });
   }
 
@@ -68,7 +70,7 @@ const loginUser = async (req, res) => {
     const user = await findDocument(
       process.env.APPWRITE_USER_COLLECTION_ID,
       "name",
-      name
+      username
     );
     if (user.response.total === 0) {
       res.status(404).send({ success: false, error: "No such user found" });
@@ -79,9 +81,11 @@ const loginUser = async (req, res) => {
       );
       if (!match) {
         res.status(404).send({ success: false, error: "Invalid Credentials" });
+        console.log("Invalid Credentials");
       } else {
         const webToken = createToken(user.response.documents[0].$id);
-        res.status(201).send({ success: true, name, webToken });
+        res.status(201).send({ success: true, username, webToken });
+        console.log("User logged in");
       }
     }
   } catch (e) {
@@ -91,9 +95,9 @@ const loginUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { name } = req.body;
+  const { username } = req.body;
 
-  if (!name) {
+  if (!username) {
     res.status(404).send({ success: false, error: "Name is required" });
   }
 
@@ -101,7 +105,7 @@ const deleteUser = async (req, res) => {
     const user = await findDocument(
       process.env.APPWRITE_USER_COLLECTION_ID,
       "name",
-      name
+      username
     );
     if (user.response.total === 0) {
       res.status(404).send({ success: false, error: "No such user found" });
@@ -112,7 +116,7 @@ const deleteUser = async (req, res) => {
       );
       res
         .status(201)
-        .send({ success: true, message: "User " + name + " is deleted" });
+        .send({ success: true, message: "User " + username + " is deleted" });
     }
   } catch (e) {
     console.log(e);

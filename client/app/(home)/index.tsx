@@ -1,11 +1,14 @@
-import { SignedIn, SignedOut, useUser, useClerk } from "@clerk/clerk-expo";
-import { Link } from "expo-router";
+// import { SignedIn, SignedOut, useUser, useClerk } from "@clerk/clerk-expo";
+import { Link, useRouter } from "expo-router";
 import { Text, View, Pressable } from "react-native";
 import { Image } from "expo-image";
+import { useSession } from "@/controllers/ctx";
 
 export default function Page() {
-  const { user } = useUser();
-  const { signOut } = useClerk();
+  // const { user } = useUser();
+  // const { signOut } = useClerk();
+  const { signOut, session } = useSession();
+  const router = useRouter();
 
   return (
     <View className="flex-1">
@@ -15,13 +18,15 @@ export default function Page() {
         contentFit="fill"
         transition={1000}
       />
-      <SignedIn>
+      {/* <SignedIn> */}
+      {session && (
         <View className="flex-auto items-center bg-white">
-          <Text>Welcome, {user?.emailAddresses[0].emailAddress}</Text>
+          {/* <Text>Welcome, {user?.emailAddresses[0].emailAddress}</Text> */}
           <Pressable
             className="mt-5 border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 justify-center self-center"
             onPress={() => {
-              signOut({ redirectUrl: "/" });
+              signOut();
+              router.replace("/");
             }}
           >
             <Text className="self-center text-lg font-bold">Sign Out</Text>
@@ -32,8 +37,10 @@ export default function Page() {
             </Link>
           </Pressable>
         </View>
-      </SignedIn>
-      <SignedOut>
+      )}
+      {/* </SignedIn> */}
+      {/* <SignedOut> */}
+      {!session && (
         <View className="flex-1 items-center bg-white">
           <Pressable className="border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 items-center justify-center">
             <Link href="/sign-in" className="mt-2 mb-2">
@@ -46,7 +53,8 @@ export default function Page() {
             </Link>
           </Pressable>
         </View>
-      </SignedOut>
+      )}
+      {/* </SignedOut> */}
     </View>
   );
 }
