@@ -62,7 +62,6 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body;
-  console.log(req.body);
 
   if (!username || !password) {
     res.status(404).send({ success: false, error: "All fields are required" });
@@ -74,7 +73,7 @@ const loginUser = async (req, res) => {
       "name",
       username
     );
-    
+
     if (user.response.total === 0) {
       res.status(404).send({ success: false, error: "No such user found" });
     } else {
@@ -84,14 +83,12 @@ const loginUser = async (req, res) => {
       );
       if (!match) {
         res.status(404).send({ success: false, error: "Invalid Credentials" });
-        console.log("Invalid Credentials");
       } else {
 
         const webToken = createToken(user.response.documents[0].$id);
         const userID = user.response.documents[0].$id;
 
         res.status(201).send({ success: true, username, userID, webToken });
-        console.log("User logged in");
       }
     }
   } catch (e) {
