@@ -8,7 +8,7 @@ export default function Page() {
   // const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 
-  const { signIn } = useSession();
+  const { signIn, isLoading } = useSession();
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -74,7 +74,10 @@ export default function Page() {
         className="mt-5 border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 justify-center self-center"
         onPress={() => {
           signIn(emailAddress, password);
-          router.replace("/");
+          if (isLoading) {
+            router.replace("/");
+          }
+          // router.replace("/");
         }}
       >
         <Text className="self-center text-xl font-bold">Sign In</Text>

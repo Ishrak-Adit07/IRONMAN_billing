@@ -6,9 +6,10 @@ import {
   Button,
   FlatList,
   StyleSheet,
+  Alert,
 } from "react-native";
 import axios from "axios";
-import Constants from "expo-constants";
+// import Constants from "expo-constants";
 
 interface Item {
   id: number;
@@ -18,15 +19,28 @@ interface Item {
   price: number;
 }
 
-const { manifest } = Constants.manifest2;
+interface SubmissionItem {
+  name: string;
+  type: string;
+  quantity: number;
+  total: number;
+}
+
+interface SubmissionData {
+  employee: string;
+  client: string;
+  products: SubmissionItem[];
+}
+
+// const { manifest } = Constants.manifest2;
 
 export default function billCalc() {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
+  const [client, setClient] = useState("");
   const [quantity, setQuantity] = useState("");
   const [items, setItems] = useState<Item[]>([]);
   const [idCounter, setIdCounter] = useState(1);
-  //useEffect(() => {handleAddItem();}, []);
 
   const handleAddItem = async () => {
     if (!name || !type || !quantity) return;
@@ -58,6 +72,10 @@ export default function billCalc() {
       console.error("Error fetching price:", error);
     }
   };
+
+  // const handleSubmit = async () => {
+  //   if (!client) Alert.alert("Please enter client name");
+  // };
 
   return (
     <View style={styles.container}>
