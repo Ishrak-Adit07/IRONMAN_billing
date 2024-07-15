@@ -22,8 +22,7 @@ const createToken = (_id) => {
 
 const registerUser = async (req, res) => {
   const { username, password } = req.body;
-  console.log("register", req.body);
-  // let name= req.username;
+
   try {
     if (!username || !password) {
       res.status(404).send({ success: false, error: "All fields required" });
@@ -33,6 +32,7 @@ const registerUser = async (req, res) => {
         "name",
         username
       );
+
       if (exist.response.total != 0) {
         res
           .status(404)
@@ -40,7 +40,7 @@ const registerUser = async (req, res) => {
       } else {
         const hashedPassword = await encryptPassword(password);
         const userData = {
-          username,
+          name: username,
           password: hashedPassword,
         };
 
@@ -48,8 +48,10 @@ const registerUser = async (req, res) => {
           process.env.APPWRITE_USER_COLLECTION_ID,
           userData
         );
-        const webToken = createToken(registerResponse.$id);
-        res.status(201).send({ success: true, username, webToken });
+
+        const webToken = createToken(registerResponse.response.documents[0].$id);
+        const userID = registerResponse.response.documents[0].$id;
+        res.status(201).send({ success: true, username, userID, webToken });
       }
     }
   } catch (e) {
@@ -72,6 +74,7 @@ const loginUser = async (req, res) => {
       "name",
       username
     );
+    
     if (user.response.total === 0) {
       res.status(404).send({ success: false, error: "No such user found" });
     } else {
@@ -83,8 +86,11 @@ const loginUser = async (req, res) => {
         res.status(404).send({ success: false, error: "Invalid Credentials" });
         console.log("Invalid Credentials");
       } else {
+
         const webToken = createToken(user.response.documents[0].$id);
-        res.status(201).send({ success: true, username, webToken });
+        const userID = user.response.documents[0].$id;
+
+        res.status(201).send({ success: true, username, userID, webToken });
         console.log("User logged in");
       }
     }

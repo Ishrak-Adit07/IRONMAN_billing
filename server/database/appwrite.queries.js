@@ -18,7 +18,7 @@ const findDocument = async (collectionId, attribute, value) => {
     const response = await databases.listDocuments(
       process.env.APPWRITE_DB_ID,
       collectionId,
-      [Query.equal(attribute, [value])]
+      [Query.equal(attribute, value)]
     );
     return { success: true, response };
   } catch (err) {
@@ -45,7 +45,12 @@ const findDocumentByMultipleAttributes = async (collectionId, attributes) => {
   }
 };
 
-const findDocumentsWithinRange = async (collectionId, attribute, value1, value2) => {
+const findDocumentsWithinRange = async (
+  collectionId,
+  attribute,
+  value1,
+  value2
+) => {
   try {
     const response = await databases.listDocuments(
       process.env.APPWRITE_DB_ID,
