@@ -115,7 +115,6 @@ const deleteMultipleDocuments = async (collectionId, attributes) => {
     }
     return { success: true, response };
   } catch (err) {
-    console.log(err);
     return { success: false, error: err.message };
   }
 };
@@ -146,7 +145,6 @@ const updateMultipleDocuments = async (collectionId, attributes, updates) => {
     }
     return { success: true, response };
   } catch (err) {
-    console.log(err);
     return { success: false, error: err.message };
   }
 };
