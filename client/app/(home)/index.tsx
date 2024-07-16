@@ -1,14 +1,24 @@
 // import { SignedIn, SignedOut, useUser, useClerk } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import { Text, View, Pressable } from "react-native";
+import { Text, View, Pressable, Button } from "react-native";
 import { Image } from "expo-image";
 import { useSession } from "@/controllers/ctx";
+import { useCallback, useState } from "react";
 
 export default function Page() {
   // const { user } = useUser();
   // const { signOut } = useClerk();
-  const { signOut, session } = useSession();
+  const { signOut, session, userID } = useSession();
   const router = useRouter();
+  // DevSettings.reload();
+  const [refresh, setRefresh] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefresh(true);
+    setTimeout(() => {
+      setRefresh(false);
+    }, 1000);
+  }, []);
 
   return (
     <View className="flex-1">
@@ -36,6 +46,13 @@ export default function Page() {
               <Text className="text-lg font-bold text-center">Make Bill</Text>{" "}
             </Link>
           </Pressable>
+          <Button
+            title="show id"
+            onPress={() => {
+              alert(userID);
+              router.replace("/products");
+            }}
+          />
         </View>
       )}
       {/* </SignedIn> */}

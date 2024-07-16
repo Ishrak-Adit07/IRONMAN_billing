@@ -1,32 +1,41 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
-import { Text, TextInput, Button, View, Pressable, Alert } from "react-native";
+import {
+  Text,
+  TextInput,
+  Button,
+  View,
+  Pressable,
+  Alert,
+  DevSettings,
+} from "react-native";
 import React from "react";
 import { useSession } from "@/controllers/ctx";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Page() {
   // const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 
-  const { signIn, isLoading } = useSession();
+  const { signIn } = useSession();
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const showAlert = () => {
-    Alert.alert(
-      "SignIN Failed",
-      "Can't find your account",
-      [
-        {
-          text: "Cancel",
-        },
-      ],
-      {
-        cancelable: true,
-      }
-    );
-  };
+  // const showAlert = () => {
+  //   Alert.alert(
+  //     "SignIN Failed",
+  //     "Can't find your account",
+  //     [
+  //       {
+  //         text: "Cancel",
+  //       },
+  //     ],
+  //     {
+  //       cancelable: true,
+  //     }
+  //   );
+  // };
 
   // const onSignInPress = React.useCallback(async () => {
   //   if (!isLoaded) {
@@ -53,7 +62,7 @@ export default function Page() {
   // }, [isLoaded, emailAddress, password]);
 
   return (
-    <View className="flex-auto bg-slate-300">
+    <SafeAreaView className="flex-auto bg-slate-300">
       <TextInput
         className="mt-14 mb-4 basis-14 w-4/5 pl-2 bg-gray-300 self-center justify-center border rounded-md"
         autoCapitalize="none"
@@ -74,10 +83,8 @@ export default function Page() {
         className="mt-5 border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 justify-center self-center"
         onPress={() => {
           signIn(emailAddress, password);
-          if (isLoading) {
-            router.replace("/");
-          }
-          // router.replace("/");
+          // console.log(userID);
+          router.replace("/");
         }}
       >
         <Text className="self-center text-xl font-bold">Sign In</Text>
@@ -92,6 +99,6 @@ export default function Page() {
           </Link>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

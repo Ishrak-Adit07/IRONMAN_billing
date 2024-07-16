@@ -171,6 +171,7 @@ const getBillsByDateRange = async (req, res) => {
 
 const createBill = async (req, res) => {
   const { employee, client, products } = req.body;
+  console.log(req.body);
   let quantities = [];
   let totals = [];
 
@@ -195,7 +196,7 @@ const createBill = async (req, res) => {
       quantities,
       productPrices,
       totalBill,
-      totals
+      totals,
     };
 
     const createBillResponse = await createDocument(

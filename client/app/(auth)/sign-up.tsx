@@ -3,6 +3,7 @@ import { TextInput, Button, View, Pressable, Text } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import { useSession } from "@/controllers/ctx";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUpScreen() {
   // const { isLoaded, signUp, setActive } = useSignUp();
@@ -55,7 +56,7 @@ export default function SignUpScreen() {
   // };
 
   return (
-    <View className="flex-auto bg-slate-300">
+    <SafeAreaView className="flex-auto bg-slate-300">
       {!pendingVerification && (
         <>
           <TextInput
@@ -101,6 +102,6 @@ export default function SignUpScreen() {
           </Pressable>
         </>
       )} */}
-    </View>
+    </SafeAreaView>
   );
 }

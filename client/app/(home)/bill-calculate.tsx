@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import axios from "axios";
 // import Constants from "expo-constants";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useSession } from "@/controllers/ctx";
 
 interface Item {
   id: number;
@@ -42,6 +44,8 @@ export default function billCalc() {
   const [items, setItems] = useState<Item[]>([]);
   const [idCounter, setIdCounter] = useState(1);
 
+  const { userID } = useSession();
+
   const handleAddItem = async () => {
     if (!name || !type || !quantity) return;
 
@@ -61,7 +65,7 @@ export default function billCalc() {
         price,
       };
 
-      setItems([...items, newItem]);
+      setItems((newItems) => [...newItems, newItem]);
       setIdCounter(idCounter + 1);
 
       // Clear the input fields
@@ -73,12 +77,57 @@ export default function billCalc() {
     }
   };
 
-  // const handleSubmit = async () => {
-  //   if (!client) Alert.alert("Please enter client name");
-  // };
+  const handleSubmit = async () => {
+    if (!client) {
+      Alert.alert("Please enter client name");
+      return;
+    } else if (items.length === 0) {
+      Alert.alert("Please add items");
+      return;
+    } else if (!userID) {
+      Alert.alert("Please login to submit bill");
+      return;
+    }
+
+    const submissionData: SubmissionData = {
+      employee: userID || "",
+      client: client,
+      products: items.map((item) => ({
+        name: item.name,
+        type: item.type,
+        quantity: item.quantity,
+        total: item.price * item.quantity,
+      })),
+    };
+
+    try {
+      await axios
+        .post("http://192.168.0.105:4000/api/bill/create", submissionData)
+        .then((response) => {
+          console.log("Submission response:", response.data);
+          Alert.alert("Bill submitted successfully");
+        });
+      setClient("");
+      setItems([]);
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      Alert.alert("Error submitting data, try again");
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text className="text-center font-bold text-2xl">Bill Page</Text>
+      <View className="items-start justify-center w-full h-1 bg-orange-600 mt-4 mb-8"></View>
+      <Text className="text-center font-bold text-lg">Client</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Client name"
+        value={client}
+        onChangeText={setClient}
+      />
+      <View className="items-start justify-center w-full h-1 bg-orange-600 mt-4 mb-8"></View>
+      <Text className="text-center font-bold text-lg">Items</Text>
       <TextInput
         style={styles.input}
         placeholder="Item name"
@@ -111,7 +160,8 @@ export default function billCalc() {
           </View>
         )}
       />
-    </View>
+      <Button title="Submit Bill" onPress={handleSubmit} />
+    </SafeAreaView>
   );
 }
 

@@ -2,6 +2,7 @@ import { Redirect, Stack } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import { useSession } from "@/controllers/ctx";
 import { Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UnAuthenticatedLayout() {
   // const { isSignedIn } = useAuth();
@@ -14,8 +15,8 @@ export default function UnAuthenticatedLayout() {
     return <Text>Loading...</Text>;
   }
   if (session) {
-    return <Redirect href="/sign-in" />;
+    return <Redirect href="/" />;
   }
 
-  return <Stack />;
+  return <Stack screenOptions={{ header: () => null }} />;
 }

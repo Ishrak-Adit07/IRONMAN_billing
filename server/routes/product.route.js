@@ -11,7 +11,7 @@ import {
 } from "../controllers/product.controller.js";
 const router = express.Router();
 
-router.get("/", getProducts);
+router.get("/get", getProducts);
 router.get("/get/:name/:type", getProduct);
 router.get("/get/price/:name/:type", getProductPrice);
 router.get("/name/:name", getProductsByName);

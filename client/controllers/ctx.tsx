@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useStorageState } from "./useStorageState";
+import { Alert } from "react-native";
 
 interface AuthContextType {
   signIn: (username: string, password: string) => Promise<void>;
@@ -7,6 +8,7 @@ interface AuthContextType {
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
+  userID: string | null;
 }
 
 const AuthContext = React.createContext<AuthContextType>({
@@ -15,6 +17,7 @@ const AuthContext = React.createContext<AuthContextType>({
   signOut: () => null,
   session: null,
   isLoading: false,
+  userID: null,
 });
 
 export function useSession() {
@@ -29,8 +32,13 @@ export function useSession() {
 
 export function SessionProvider(props: React.PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState("session");
+  const [userID, setUserID] = useState<string | null>(null);
 
   const signIn = async (username: string, password: string) => {
+    if (!username || !password) {
+      Alert.alert("Please enter username and password");
+      return;
+    }
     try {
       const response = await fetch("http://192.168.0.105:4000/api/user/login", {
         method: "POST",
@@ -42,11 +50,15 @@ export function SessionProvider(props: React.PropsWithChildren) {
 
       if (!response.ok) {
         console.log("response", response);
+        Alert.alert(response.statusText);
         throw new Error("Authentication failed");
       }
 
-      const { webToken } = await response.json();
+      const { webToken, userID } = await response.json();
+      console.log("webToken", webToken);
+      console.log("userID", userID);
       setSession(webToken);
+      setUserID(userID);
     } catch (error) {
       console.error("Sign-in error:", error);
     }
@@ -69,14 +81,16 @@ export function SessionProvider(props: React.PropsWithChildren) {
         throw new Error("Authentication failed");
       }
 
-      const { webToken } = await response.json();
+      const { webToken, userID } = await response.json();
       setSession(webToken);
+      setUserID(userID);
     } catch (error) {
       console.error("Sign-in error:", error);
     }
   };
   const signOut = () => {
     setSession(null);
+    setUserID(null);
   };
 
   return (
@@ -87,6 +101,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
         signOut,
         session,
         isLoading,
+        userID,
       }}
     >
       {props.children}
