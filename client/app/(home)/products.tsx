@@ -18,13 +18,14 @@ export default function Products() {
         const response = await axios.get(
           "http://192.168.0.105:4000/api/product/get"
         );
-        console.log(response.data);
         if (response.data.success) {
           const product = response.data.products.map((p: any) => ({
+            id: p.$id,
             name: p.name,
             price: p.price,
             type: p.type,
           }));
+          console.log(product);
           setProducts(product);
         }
       } catch (error) {
@@ -38,7 +39,9 @@ export default function Products() {
   return (
     <View>
       {products.map((p, index) => (
-        <Text key={index}>p.name</Text>
+        <Text key={index}>
+          {p.name} {p.type} {p.price}{" "}
+        </Text>
       ))}
     </View>
   );

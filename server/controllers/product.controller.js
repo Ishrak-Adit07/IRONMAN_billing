@@ -12,6 +12,7 @@ const getProducts = async (req, res) => {
     const exist = await getAllDocuments(
       process.env.APPWRITE_PRODUCT_COLLECTION_ID
     );
+    console.log(exist);
     if (exist.response.total != 0) {
       const products = exist.response.documents;
       res.status(200).send({ success: true, products });

@@ -41,18 +41,18 @@ export default function Page() {
           >
             <Text className="self-center text-lg font-bold">Sign Out</Text>
           </Pressable>
+
           <Pressable className="border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 items-center justify-center">
             <Link href="/bill-calculate">
               <Text className="text-lg font-bold text-center">Make Bill</Text>{" "}
             </Link>
           </Pressable>
-          <Button
-            title="show id"
-            onPress={() => {
-              alert(userID);
-              router.replace("/products");
-            }}
-          />
+
+          <Pressable className="border-2 border-blue-600 bg-orange-400 rounded-md h-14 w-40 items-center justify-center">
+            <Link href="/products2">
+              <Text className="text-lg font-bold text-center">Services</Text>{" "}
+            </Link>
+          </Pressable>
         </View>
       )}
       {/* </SignedIn> */}
